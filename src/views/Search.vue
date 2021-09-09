@@ -1,5 +1,10 @@
 <template>
-  <div id="search">
+  <div id="search" class="page">
+    <span class="floating-label">Username/Email</span>
+    <input type="text" />
+    <span class="floating-label">Password</span>
+    <input type="password" />
+    <button @click="login">Log In</button>
   </div>
 </template>
 
@@ -7,5 +12,9 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({})
-export default class Search extends Vue {}
+export default class Search extends Vue {
+  private login() {
+    return;
+  }
+}
 </script>
