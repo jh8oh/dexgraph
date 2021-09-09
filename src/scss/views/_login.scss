@@ -1,0 +1,16 @@
+// ---------------------------------------------------------------------------
+// This file contains styles that are specific to the "Login" page.
+// ---------------------------------------------------------------------------
+
+#login {
+    &-content {
+        @extend %absolute-center;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+
+        & > * {
+            margin: 4px;
+        }
+    }
+}

@@ -1,0 +1,31 @@
+// ---------------------------------------------------------------------------
+// This file contains all styles related to the "Input" component.
+// ---------------------------------------------------------------------------
+
+label.input-text {
+    display: block;
+    position: relative;
+    height: 48px;
+    min-width: 400px;
+
+    input {
+        position: absolute;
+        height: 48px;
+        min-width: 400px;
+        padding: 8px 16px;
+        @include text($body-font-family, 16px, 400, 1.8, 0.5px);
+
+        & ~ span {
+            position: absolute;
+            left: 16px;
+            top: 20px;
+            transition: 0.2s ease-in-out;
+        }
+
+        &:focus ~ span,
+        &:not(:focus):valid ~ span {
+            top: 6px;
+            font-size: 10px;
+        }
+    }
+}

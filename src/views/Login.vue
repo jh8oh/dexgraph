@@ -1,10 +1,18 @@
 <template>
   <div id="login" class="page">
-    <span class="floating-label">Username/Email</span>
-    <input type="text" />
-    <span class="floating-label">Password</span>
-    <input type="password" />
-    <button @click="login">Log In</button>
+    <div id="login-content">
+      <label class="input-text">
+        <input type="text" required />
+        <span>Username/Email</span>
+      </label>
+      <br />
+      <label class="input-text">
+        <input type="password" required />
+        <span>Password</span>
+      </label>
+      <br />
+      <button @click="login">Log In</button>
+    </div>
   </div>
 </template>
 
