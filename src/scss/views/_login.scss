@@ -10,7 +10,15 @@
         align-items: center;
 
         & > * {
-            margin: 4px;
+            margin-bottom: 8px;
         }
+    }
+
+    h1 {
+        margin-bottom: 24px;
+    }
+
+    #mangadex {
+        color: $color-primary;
     }
 }

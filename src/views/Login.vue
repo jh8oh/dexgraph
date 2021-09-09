@@ -1,16 +1,17 @@
 <template>
   <div id="login" class="page">
     <div id="login-content">
+      <h1>
+        Log in to <span id="mangadex"><strong>MangaDex</strong></span>
+      </h1>
       <label class="input-text">
         <input type="text" required />
         <span>Username/Email</span>
       </label>
-      <br />
       <label class="input-text">
         <input type="password" required />
         <span>Password</span>
       </label>
-      <br />
       <button @click="login">Log In</button>
     </div>
   </div>

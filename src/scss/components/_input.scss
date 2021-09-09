@@ -5,15 +5,17 @@
 label.input-text {
     display: block;
     position: relative;
-    height: 48px;
-    min-width: 400px;
+    height: 64px;
+    min-width: 432px;
 
     input {
         position: absolute;
         height: 48px;
         min-width: 400px;
-        padding: 8px 16px;
         @include text($body-font-family, 16px, 400, 1.8, 0.5px);
+        background-color: $color-background-variant;
+        padding: 8px 16px;
+        border: none;
 
         & ~ span {
             position: absolute;
