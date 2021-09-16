@@ -20,8 +20,8 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { HOST_URL, LOGIN_ENDPOINT } from "@/ts/network/config";
+import { AxiosError, AxiosResponse } from "axios";
+import { login } from "@/ts/network/calls";
 import LoginResponse from "@/ts/model/login-response";
 import ErrorResponse from "@/ts/model/error-response";
 import store from "@/store";
@@ -53,12 +53,7 @@ export default class Login extends Vue {
     }
 
     // Call MangaDex API
-    axios
-      .post(HOST_URL + LOGIN_ENDPOINT, {
-        username: isEmail ? "" : this.username,
-        email: isEmail ? this.username : "",
-        password: this.password,
-      })
+    login(this.username, this.password, isEmail)
       .then((response: AxiosResponse<LoginResponse>) => {
         store.commit("setToken", response.data.token);
         store.commit("setRefresh", response.data.result);
