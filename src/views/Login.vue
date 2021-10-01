@@ -20,12 +20,11 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import { AxiosError, AxiosResponse } from "axios";
-import { login } from "@/ts/network/calls";
-import LoginResponse from "@/ts/model/response/login-response";
-import ErrorResponse from "@/ts/model/response/error-response";
 import { store } from "@/store";
 import router from "@/router";
+import { AxiosError, AxiosResponse } from "axios";
+import { login } from "@/ts/network/calls";
+import { LoginResponse, ErrorResponse } from "@/ts/model/response";
 
 export default class Login extends Vue {
   private username = "";

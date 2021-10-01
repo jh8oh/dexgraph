@@ -5,10 +5,9 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { store } from "@/store";
-import { getMangaFollows } from "@/ts/network/calls";
 import { AxiosError, AxiosResponse } from "axios";
-import MangaFollowResponse from "@/ts/model/response/manga-follow-response";
-import ErrorResponse from "@/ts/model/response/error-response";
+import { getMangaFollows } from "@/ts/network/calls";
+import { MangaFollowResponse, ErrorResponse } from "@/ts/model/response";
 
 @Options({
   mounted() {

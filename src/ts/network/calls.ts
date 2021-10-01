@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { HOST_URL, LOGIN_ENDPOINT, MANGA_FOLLOW_ENDPOINT } from "./config";
-import LoginResponse from "../model/response/login-response";
-import MangaFollowResponse from "../model/response/manga-follow-response";
+import { LoginResponse, MangaFollowResponse } from "../model/response";
 
 const login = async (
   username: string,
