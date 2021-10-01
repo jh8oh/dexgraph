@@ -22,8 +22,8 @@
 import { Vue } from "vue-class-component";
 import { AxiosError, AxiosResponse } from "axios";
 import { login } from "@/ts/network/calls";
-import LoginResponse from "@/ts/model/login-response";
-import ErrorResponse from "@/ts/model/error-response";
+import LoginResponse from "@/ts/model/response/login-response";
+import ErrorResponse from "@/ts/model/response/error-response";
 import store from "@/store";
 
 export default class Login extends Vue {

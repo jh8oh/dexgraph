@@ -1,4 +1,4 @@
-class Manga {}
+import Manga from "../manga";
 
 export default class MangaFollowResponse {
   result: string;

@@ -1,12 +1,4 @@
-class Token {
-  session: string;
-  refresh: string;
-
-  constructor(session: string, refresh: string) {
-    this.session = session;
-    this.refresh = refresh;
-  }
-}
+import Token from "../token";
 
 export default class LoginResponse {
   result: string;
