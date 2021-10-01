@@ -25,6 +25,7 @@ import router from "@/router";
 import { AxiosError, AxiosResponse } from "axios";
 import { login } from "@/ts/network/calls";
 import { LoginResponse, ErrorResponse } from "@/ts/model/response";
+import { handleErrorMessage } from "@/ts/util/errorMessage";
 
 export default class Login extends Vue {
   private username = "";
@@ -59,20 +60,7 @@ export default class Login extends Vue {
         router.push("loading");
       })
       .catch((error: AxiosError<ErrorResponse>) => {
-        if (error.response) {
-          // Request made and server responded
-          this.errorMessage = error.response.data.errors[0].detail;
-          console.log(error.response.data);
-        } else if (error.request) {
-          // The request was made but no response was received
-          this.errorMessage =
-            "MangaDex failed to respond. Please try again later.";
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          this.errorMessage = "Unable to send request. Please try again later.";
-          console.log("Error", error.message);
-        }
+        this.errorMessage = handleErrorMessage(error);
       });
   }
 }

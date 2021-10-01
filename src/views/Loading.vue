@@ -15,6 +15,7 @@ import { store } from "@/store";
 import { AxiosError, AxiosResponse } from "axios";
 import { getMangaFollows } from "@/ts/network/calls";
 import { MangaFollowResponse, ErrorResponse } from "@/ts/model/response";
+import { handleErrorMessage } from "@/ts/util/errorMessage";
 
 export default class Loading extends Vue {
   private total = 0;
@@ -47,14 +48,12 @@ export default class Loading extends Vue {
               });
             })
             .catch((error: AxiosError<ErrorResponse>) => {
-              // TODO
-              console.log(error);
+              this.errorMessage = handleErrorMessage(error);
             });
         }
       })
       .catch((error: AxiosError<ErrorResponse>) => {
-        // TODO
-        console.log(error);
+        this.errorMessage = handleErrorMessage(error);
       });
   }
 }
