@@ -2,8 +2,9 @@
   <div id="loading" class="page">
     <div id="loading-content">
       <img src="../assets/spinner-light.svg" />
-      <span>{{ description }}</span>
+      <p>{{ description }}</p>
       <progress :value="progress" :max="total" />
+      <p id="error">{{ errorMessage }}</p>
     </div>
   </div>
 </template>
@@ -19,13 +20,14 @@ export default class Loading extends Vue {
   private total = 0;
   private progress = 1;
   private description = "";
+  private errorMessage = "";
 
   mounted(): void {
     this.getAllMangaFollows();
   }
 
   private getAllMangaFollows(): void {
-    this.description = "Grabbing your follows";
+    this.description = "Grabbing your followed manga";
 
     const session = store.state.token.session;
     let body = { limit: 1, offset: 0 };
