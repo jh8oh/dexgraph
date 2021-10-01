@@ -25,6 +25,7 @@ import { login } from "@/ts/network/calls";
 import LoginResponse from "@/ts/model/response/login-response";
 import ErrorResponse from "@/ts/model/response/error-response";
 import { store } from "@/store";
+import router from "@/router";
 
 export default class Login extends Vue {
   private username = "";
@@ -56,6 +57,7 @@ export default class Login extends Vue {
     login(this.username, this.password, isEmail)
       .then((response: AxiosResponse<LoginResponse>) => {
         store.commit("setToken", response.data.token);
+        router.push("Loading");
       })
       .catch((error: AxiosError<ErrorResponse>) => {
         if (error.response) {

@@ -19,10 +19,9 @@ const login = async (
 
 const getMangaFollows = async (
   session: string,
-  offset: number
+  body: { limit: number; offset: number }
 ): Promise<AxiosResponse<MangaFollowResponse>> => {
   const bearer = { Authorization: `Bearer ${session}` };
-  const body = { limit: 100, offset: offset };
 
   const response = await axios.get(HOST_URL + MANGA_FOLLOW_ENDPOINT, {
     headers: bearer,
