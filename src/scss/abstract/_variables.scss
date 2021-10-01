@@ -1,0 +1,27 @@
+// ---------------------------------------------------------------------------
+// Contains all site-wide SCSS variables
+// ---------------------------------------------------------------------------
+
+// Colors
+$color-primary: #ff6740;
+$color-priamry-dark: #e6613e;
+$color-on-primary: white;
+
+$color-background: white;
+$color-background-variant: #f0f1f2;
+$color-on-background: #2c2c2c;
+
+$color-background-dark: #191a1c;
+$color-background-dark-variant: #2c2c2c;
+$color-on-background-dark: white;
+
+$color-error: #ff4040;
+
+// Fonts
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Spartan&display=swap");
+$heading-font-family: "Spartan", sans-serif;
+$body-font-family: "Poppins", sans-serif;
+
+// Dimesions
+$header-height: 56px;
+$content-height: calc(100vh - #{$header-height});

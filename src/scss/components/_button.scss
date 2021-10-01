@@ -1,0 +1,17 @@
+// ---------------------------------------------------------------------------
+// This file contains all styles related to the "Button" component.
+// ---------------------------------------------------------------------------
+
+button {
+    min-width: 200px;
+    min-height: 48px;
+    @include text($body-font-family, 16px, 400, 1.8, 0.5px, $color-on-primary);
+    background-color: $color-primary;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $color-priamry-dark;
+    }
+}
