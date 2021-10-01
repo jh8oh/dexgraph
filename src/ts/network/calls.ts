@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
-import { HOST_URL, LOGIN_ENDPOINT } from "./config";
+import { HOST_URL, LOGIN_ENDPOINT, MANGA_FOLLOW_ENDPOINT } from "./config";
 import LoginResponse from "../model/login-response";
+import MangaFollowResponse from "../model/manga-follow-response";
 
 const login = async (
   username: string,
@@ -16,4 +17,19 @@ const login = async (
   return response;
 };
 
-export { login };
+const getMangaFollows = async (
+  session: string,
+  offset: number
+): Promise<AxiosResponse<MangaFollowResponse>> => {
+  const bearer = { Authorization: `Bearer ${session}` };
+  const body = { limit: 100, offset: offset };
+
+  const response = await axios.get(HOST_URL + MANGA_FOLLOW_ENDPOINT, {
+    headers: bearer,
+    params: body,
+  });
+
+  return response;
+};
+
+export { login, getMangaFollows };
