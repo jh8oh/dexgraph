@@ -1,9 +1,4 @@
-export default class Token {
+export default interface Token {
   session: string;
   refresh: string;
-
-  constructor(session: string, refresh: string) {
-    this.session = session;
-    this.refresh = refresh;
-  }
 }

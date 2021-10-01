@@ -1,1 +1,1 @@
-export default class Manga {}
+export default interface Manga {}

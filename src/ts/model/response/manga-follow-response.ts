@@ -1,26 +1,10 @@
 import Manga from "../manga";
 
-export default class MangaFollowResponse {
+export default interface MangaFollowResponse {
   result: string;
   response: string;
   data: Manga[];
   limit: number;
   offset: number;
   total: number;
-
-  constructor(
-    result: string,
-    response: string,
-    data: Manga[],
-    limit: number,
-    offset: number,
-    total: number
-  ) {
-    this.result = result;
-    this.response = response;
-    this.data = data;
-    this.limit = limit;
-    this.offset = offset;
-    this.total = total;
-  }
 }
