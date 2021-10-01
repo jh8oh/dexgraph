@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { HOST_URL, LOGIN_ENDPOINT } from "@/ts/network/config";
+import { HOST_URL, LOGIN_ENDPOINT } from "./config";
 import LoginResponse from "../model/login-response";
 
 const login = async (

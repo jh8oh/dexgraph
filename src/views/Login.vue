@@ -56,7 +56,6 @@ export default class Login extends Vue {
     login(this.username, this.password, isEmail)
       .then((response: AxiosResponse<LoginResponse>) => {
         store.commit("setToken", response.data.token);
-        store.commit("setRefresh", response.data.result);
       })
       .catch((error: AxiosError<ErrorResponse>) => {
         if (error.response) {
