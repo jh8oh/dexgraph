@@ -47,7 +47,7 @@ interface MangaAttributes extends Attributes {
   publicationDemographic: string;
   status: string;
   tags: Tag[];
-  title: string;
+  title: { en: string };
   year: string;
 }
 
