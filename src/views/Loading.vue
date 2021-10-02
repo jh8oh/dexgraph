@@ -13,16 +13,16 @@
 import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import { AxiosError, AxiosResponse } from "axios";
-import { getMangaFollows, getMangaRelated } from "@/ts/network/calls";
+import { getMangaStatus, getManga, getMangaRelated } from "@/ts/network/calls";
 import {
-  MangaFollowResponse,
   ErrorResponse,
   MangaStatusResponse,
+  MangaResponse,
   AuthorArtistResponse,
   CoverResponse,
 } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
-import { AuthorArtist, Cover } from "@/ts/model/data";
+import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
 
 export default class Loading extends Vue {
   private total = 0;
@@ -30,114 +30,73 @@ export default class Loading extends Vue {
   private description = "";
   private errorMessage = "";
 
-  private authorArtistIdMap = new Map<string, AuthorArtist>();
-
   mounted(): void {
     this.getAllMangaFollows();
+  }
+
+  getRelationshipIds(followedManga: Manga[], type: string): (string | undefined)[] {
+    return followedManga.map((manga) => {
+      return manga.relationships.find((relationship) => relationship.type === type)?.id;
+    });
   }
 
   private getAllMangaFollows(): void {
     this.description = "Grabbing your followed manga";
 
     const session = store.state.token.session;
-    let body = { limit: 1, offset: 0 };
-    getMangaFollows(session, body)
-      .then((response: AxiosResponse<MangaFollowResponse>) => {
-        this.total = response.data.total; // Get total
 
-        for (let offset = 0; offset < this.total; offset += 100) {
-          body = { limit: 100, offset: offset };
-          getMangaFollows(session, body)
-            .then((response: AxiosResponse<MangaFollowResponse>) => {
+    // Grab followed manga statuses
+    getMangaStatus(session)
+      .then((response: AxiosResponse<MangaStatusResponse>) => {
+        let statuses = response.data.statuses;
+        let statusesEntries = Object.entries(statuses);
+
+        this.total = statusesEntries.length;
+
+        for (let i = 0; i < this.total; i += 100) {
+          let mangaIds = statusesEntries.slice(i, i + 100).map((status) => {
+            return status[0];
+          });
+
+          getManga(mangaIds)
+            .then((response: AxiosResponse<MangaResponse>) => {
               let followedManga = response.data.data;
-              followedManga.forEach((manga) => {
-                const mangaId = manga.id;
-                let authorId = manga.relationships.find(
-                  (relationship) => relationship.type === "author"
-                )?.id;
-                let artistId = manga.relationships.find(
-                  (relationship) => relationship.type === "artist"
-                )?.id;
-                const coverId = manga.relationships.find(
-                  (relationship) => relationship.type === "cover_art"
-                )?.id;
+              let authorIds = this.getRelationshipIds(followedManga, "author");
+              let artistIds = this.getRelationshipIds(followedManga, "artist");
+              let coverIds = this.getRelationshipIds(followedManga, "cover_art");
 
-                let status: string | undefined = undefined;
-                let author: AuthorArtist | undefined = undefined;
-                let artist: AuthorArtist | undefined = undefined;
-                let sameArtist = false;
-                let cover: Cover | undefined = undefined;
+              getMangaRelated(authorIds, artistIds, coverIds).then((responses) => {
+                let authors: AuthorArtist[];
+                let artists: AuthorArtist[];
+                let covers: Cover[];
 
-                // Check if author/artist has been searched before
-                if (authorId != undefined) {
-                  if (this.authorArtistIdMap.has(authorId)) {
-                    author = this.authorArtistIdMap.get(authorId);
-                    authorId = undefined;
-                  }
-                }
-                if (artistId != undefined) {
-                  if (this.authorArtistIdMap.has(artistId)) {
-                    artist = this.authorArtistIdMap.get(artistId);
-                    artistId = undefined;
-                  }
+                // Author
+                if (responses[0].status === "fulfilled") {
+                  authors = (
+                    responses[0] as PromiseFulfilledResult<AxiosResponse<AuthorArtistResponse>>
+                  ).value.data.data;
                 }
 
-                // Check if author/artist are the same
-                if (authorId === artistId) {
-                  artistId = undefined;
-                  sameArtist = true;
+                // Artist
+                if (responses[1].status === "fulfilled") {
+                  artists = (
+                    responses[1] as PromiseFulfilledResult<AxiosResponse<AuthorArtistResponse>>
+                  ).value.data.data;
                 }
 
-                getMangaRelated(session, mangaId, authorId, artistId, coverId).then((responses) => {
-                  // Manga status
-                  if (responses[0].status === "fulfilled") {
-                    status = (
-                      responses[0] as PromiseFulfilledResult<AxiosResponse<MangaStatusResponse>>
-                    ).value.data.status;
-                  }
+                // Cover
+                if (responses[2].status === "fulfilled") {
+                  covers = (responses[2] as PromiseFulfilledResult<AxiosResponse<CoverResponse>>)
+                    .value.data.data;
+                }
 
-                  let index = 1;
-
-                  // Author
-                  if (authorId != undefined) {
-                    if (responses[index].status === "fulfilled") {
-                      author = (
-                        responses[index] as PromiseFulfilledResult<
-                          AxiosResponse<AuthorArtistResponse>
-                        >
-                      ).value.data.data;
-                      this.authorArtistIdMap.set(authorId, author);
-                    }
-                    index++;
-                  }
-
-                  // Artist
-                  if (artistId != undefined) {
-                    if (responses[index].status === "fulfilled") {
-                      artist = (
-                        responses[index] as PromiseFulfilledResult<
-                          AxiosResponse<AuthorArtistResponse>
-                        >
-                      ).value.data.data;
-                      this.authorArtistIdMap.set(artistId, artist);
-                    }
-                    index++;
-                  }
-                  if (sameArtist) {
-                    artist = author;
-                  }
-
-                  // Cover
-                  if (coverId != undefined) {
-                    if (responses[index].status === "fulfilled") {
-                      cover = (
-                        responses[index] as PromiseFulfilledResult<AxiosResponse<CoverResponse>>
-                      ).value.data.data;
-                    }
-                  }
+                followedManga.forEach((manga, index) => {
+                  let status = statusesEntries[index][1];
+                  let author = authors[index];
+                  let artist = artists[index];
+                  let cover = covers[index];
 
                   store.commit("addManga", { manga, status, author, artist, cover });
-
                   this.progress++;
                 });
               });

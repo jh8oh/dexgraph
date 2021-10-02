@@ -20,7 +20,11 @@ export interface LoginResponse extends Response {
   token: Token;
 }
 
-export interface MangaFollowResponse extends Response {
+export interface MangaStatusResponse extends Response {
+  statuses: object;
+}
+
+export interface MangaResponse extends Response {
   response: string;
   data: Manga[];
   limit: number;
@@ -28,16 +32,18 @@ export interface MangaFollowResponse extends Response {
   total: number;
 }
 
-export interface MangaStatusResponse extends Response {
-  status: string;
-}
-
 export interface AuthorArtistResponse extends Response {
   response: string;
-  data: AuthorArtist;
+  data: AuthorArtist[];
+  limit: number;
+  offset: number;
+  total: number;
 }
 
 export interface CoverResponse extends Response {
   response: string;
-  data: Cover;
+  data: Cover[];
+  limit: number;
+  offset: number;
+  total: number;
 }
