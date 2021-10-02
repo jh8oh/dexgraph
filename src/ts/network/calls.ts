@@ -41,7 +41,11 @@ export const getMangaStatus = async (
 export const getManga = async (
   mangaIds: (string | undefined)[]
 ): Promise<AxiosResponse<MangaResponse>> => {
-  const body = { limit: 100, ids: mangaIds };
+  const body = {
+    limit: 100,
+    ids: mangaIds,
+    contentRating: ["safe", "suggestive", "erotica", "pornographic"],
+  };
   const response = await axios.get(HOST_URL + MANGA_ENDPOINT, {
     params: body,
   });
