@@ -1,11 +1,17 @@
-import Manga from "@/ts/model/manga";
+import { AuthorArtist, Cover, Manga } from "@/ts/model/manga";
 import Token from "@/ts/model/token";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 
 export interface State {
   token: Token;
-  followedMangas: Manga[];
+  followedMangas: {
+    manga: Manga;
+    status: string;
+    author: AuthorArtist;
+    artist: AuthorArtist;
+    cover: Cover;
+  }[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -19,7 +25,16 @@ export const store = createStore<State>({
     setToken(state, token: Token) {
       state.token = token;
     },
-    addManga(state, manga: Manga) {
+    addManga(
+      state,
+      manga: {
+        manga: Manga;
+        status: string;
+        author: AuthorArtist;
+        artist: AuthorArtist;
+        cover: Cover;
+      }
+    ) {
       state.followedMangas.push(manga);
     },
   },

@@ -44,7 +44,14 @@ export default class Loading extends Vue {
               let followedManga = response.data.data;
               followedManga.forEach((manga) => {
                 this.progress++;
-                store.commit("addManga", manga);
+
+                // Get status
+
+                // Get author
+
+                // Get artist
+
+                // Get cover
               });
             })
             .catch((error: AxiosError<ErrorResponse>) => {

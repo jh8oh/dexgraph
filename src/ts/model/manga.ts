@@ -1,27 +1,30 @@
+// Generic
+interface Attributes {
+  version: number;
+  createdAt: string | undefined;
+  updatedAt: string | undefined;
+}
+
 interface Relationship {
   id: string;
   type: string;
 }
 
-interface Object {
+interface Object<T extends Attributes> {
+  attributes: T;
   id: string;
   relationships: Relationship[];
   type: string;
 }
 
-interface Attributes {
-  description: { en: string };
-  version: number;
-}
-
+// Manga
 interface TagAttributes extends Attributes {
+  description: { en: string };
   group: string;
   name: { en: string };
 }
 
-interface Tag extends Object {
-  attributes: TagAttributes;
-}
+type Tag = Object<TagAttributes>;
 
 interface Links {
   al: string;
@@ -36,7 +39,7 @@ interface Links {
 interface MangaAttributes extends Attributes {
   altTitles: { en: string }[];
   contentRating: string;
-  createdAt: string;
+  description: { en: string };
   lastChapter: string;
   lastVolume: string;
   links: Links;
@@ -45,10 +48,35 @@ interface MangaAttributes extends Attributes {
   status: string;
   tags: Tag[];
   title: string;
-  updatedAt: string;
   year: string;
 }
 
-export default interface Manga extends Object {
-  attributes: MangaAttributes;
+export type Manga = Object<MangaAttributes>;
+
+// Author/Artist
+interface AuthorArtistAttributes extends Attributes {
+  name: string;
+  imageUrl: string;
+  twitter: string;
+  pixiv: string;
+  melonBook: string;
+  fanBox: string;
+  booth: string;
+  nicoVideo: string;
+  skeb: string;
+  fantia: string;
+  tumblr: string;
+  youtube: string;
+  website: string;
 }
+
+export type AuthorArtist = Object<AuthorArtistAttributes>;
+
+// Cover
+interface CoverAttributes extends Attributes {
+  volume: string;
+  fileName: string;
+  description: string;
+}
+
+export type Cover = Object<CoverAttributes>;
