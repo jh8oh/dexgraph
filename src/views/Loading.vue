@@ -44,17 +44,6 @@ export default class Loading extends Vue {
   private anal_progress = 0;
   private errorMessage = "";
 
-  private followStatus = new Map<string, number>(staticFollowStatus.map((v) => [v, 0]));
-  private mangaStatus = new Map<string, number>(staticMangaStatus.map((v) => [v, 0]));
-  private demographic = new Map<string, number>(staticPublicationDemographic.map((v) => [v, 0]));
-  private contentRating = new Map<string, number>(staticContentRating.map((v) => [v, 0]));
-  private originalLanguage = new Map<string, number>();
-  private genre = new Map<string, number>();
-  private theme = new Map<string, number>();
-  private format = new Map<string, number>();
-  private author = new Map<AuthorArtist, number>();
-  private artist = new Map<AuthorArtist, number>();
-
   mounted(): void {
     this.getAllMangaFollows();
   }
@@ -147,36 +136,73 @@ export default class Loading extends Vue {
     }
   }
 
+  private mapToArray<K, T>(map: Map<K, T>): [K, T][] {
+    const array: [K, T][] = [];
+    map.forEach((value: T, key: K) => {
+      array.push([key, value]);
+    });
+    return array;
+  }
+
   private sortManga(): void {
+    let followStatusCount = new Map<string, number>(staticFollowStatus.map((v) => [v, 0]));
+    let mangaStatusCount = new Map<string, number>(staticMangaStatus.map((v) => [v, 0]));
+    let demographicCount = new Map<string, number>(staticPublicationDemographic.map((v) => [v, 0]));
+    let contentRatingCount = new Map<string, number>(staticContentRating.map((v) => [v, 0]));
+    let originalLanguageCount = new Map<string, number>();
+    let genreCount = new Map<string, number>();
+    let themeCount = new Map<string, number>();
+    let formatCount = new Map<string, number>();
+    let authorCount = new Map<AuthorArtist, number>();
+    let artistCount = new Map<AuthorArtist, number>();
+
     const followedMangas = store.state.followedMangas;
     for (const mangaFull of followedMangas) {
-      this.addToMap(this.followStatus, mangaFull.status); // Status
-      this.addToMap(this.mangaStatus, mangaFull.manga.attributes.status); // Manga Status
-      this.addToMap(this.demographic, mangaFull.manga.attributes.publicationDemographic); // Publication Demographic
-      this.addToMap(this.contentRating, mangaFull.manga.attributes.contentRating); // Content Rating
-      this.addToMap(this.originalLanguage, mangaFull.manga.attributes.originalLanguage); // Original Language
+      this.addToMap(followStatusCount, mangaFull.status); // Status
+      this.addToMap(mangaStatusCount, mangaFull.manga.attributes.status); // Manga Status
+      this.addToMap(demographicCount, mangaFull.manga.attributes.publicationDemographic); // Publication Demographic
+      this.addToMap(contentRatingCount, mangaFull.manga.attributes.contentRating); // Content Rating
+      this.addToMap(originalLanguageCount, mangaFull.manga.attributes.originalLanguage); // Original Language
 
       // Genre/Theme/Format
       for (const tag of mangaFull.manga.attributes.tags) {
         switch (tag.attributes.group) {
           case "genre":
-            this.addToMap(this.genre, tag.attributes.name.en);
+            this.addToMap(genreCount, tag.attributes.name.en);
             break;
           case "theme":
-            this.addToMap(this.theme, tag.attributes.name.en);
+            this.addToMap(themeCount, tag.attributes.name.en);
             break;
           case "format":
-            this.addToMap(this.format, tag.attributes.name.en);
+            this.addToMap(formatCount, tag.attributes.name.en);
             break;
         }
       }
 
       // Author
-      this.addToMap(this.author, mangaFull.author);
-      this.addToMap(this.artist, mangaFull.artist);
+      this.addToMap(authorCount, mangaFull.author);
+      this.addToMap(artistCount, mangaFull.artist);
 
       this.anal_progress++;
     }
+
+    // Save values
+    const commitCount = (type: string, payloads: ([string, number] | [AuthorArtist, number])[]) => {
+      payloads.forEach((p) => {
+        store.commit(type, p);
+      });
+    };
+
+    commitCount("addFollowStatusCount", this.mapToArray(followStatusCount));
+    commitCount("addMangaStatusCount", this.mapToArray(mangaStatusCount));
+    commitCount("addDemographicCount", this.mapToArray(demographicCount));
+    commitCount("addContentRatingCount", this.mapToArray(contentRatingCount));
+    commitCount("addOriginalLanguageCount", this.mapToArray(originalLanguageCount));
+    commitCount("addGenreCount", this.mapToArray(genreCount));
+    commitCount("addThemeCount", this.mapToArray(themeCount));
+    commitCount("addFormatCount", this.mapToArray(formatCount));
+    commitCount("addAuthorCount", this.mapToArray(authorCount));
+    commitCount("addArtistCount", this.mapToArray(artistCount));
   }
 }
 </script>
