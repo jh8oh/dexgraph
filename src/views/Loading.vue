@@ -30,6 +30,39 @@ export default class Loading extends Vue {
   private description = "";
   private errorMessage = "";
 
+  private followStatus = new Map<string, number>([
+    ["reading", 0],
+    ["re_reading", 0],
+    ["completed", 0],
+    ["on_hold", 0],
+    ["dropped", 0],
+    ["plan_to_read", 0],
+  ]);
+  private mangaStatus = new Map<string, number>([
+    ["ongoing", 0],
+    ["completed", 0],
+    ["hiatus", 0],
+    ["cancelled", 0],
+  ]);
+  private demographic = new Map<string, number>([
+    ["shounen", 0],
+    ["shoujo", 0],
+    ["josei", 0],
+    ["seinen", 0],
+  ]);
+  private contentRating = new Map<string, number>([
+    ["safe", 0],
+    ["suggestive", 0],
+    ["erotica", 0],
+    ["pornographic", 0],
+  ]);
+  private originalLanguage = new Map<string, number>();
+  private genre = new Map<string, number>();
+  private theme = new Map<string, number>();
+  private format = new Map<string, number>();
+  private author = new Map<AuthorArtist, number>();
+  private artist = new Map<AuthorArtist, number>();
+
   mounted(): void {
     this.getAllMangaFollows();
   }
@@ -98,6 +131,10 @@ export default class Loading extends Vue {
 
                   store.commit("addManga", { manga, status, author, artist, cover });
                   this.progress++;
+
+                  if (this.progress === this.total) {
+                    this.sortManga();
+                  }
                 });
               });
             })
@@ -109,6 +146,50 @@ export default class Loading extends Vue {
       .catch((error: AxiosError<ErrorResponse>) => {
         this.errorMessage = handleErrorMessage(error);
       });
+  }
+
+  private addToMap<K>(map: Map<K, number>, value: K) {
+    if (map.has(value)) {
+      let number = map.get(value)!;
+      map.set(value, number + 1);
+    } else {
+      map.set(value, 1);
+    }
+  }
+
+  private sortManga(): void {
+    this.description = "Analysing your followed manga";
+    this.progress = 0;
+
+    const followedMangas = store.state.followedMangas;
+    for (const mangaFull of followedMangas) {
+      this.addToMap(this.followStatus, mangaFull.status); // Status
+      this.addToMap(this.mangaStatus, mangaFull.manga.attributes.status); // Manga Status
+      this.addToMap(this.demographic, mangaFull.manga.attributes.publicationDemographic); // Publication Demographic
+      this.addToMap(this.contentRating, mangaFull.manga.attributes.contentRating); // Content Rating
+      this.addToMap(this.originalLanguage, mangaFull.manga.attributes.originalLanguage); // Original Language
+
+      // Genre/Theme/Format
+      for (const tag of mangaFull.manga.attributes.tags) {
+        switch (tag.attributes.group) {
+          case "genre":
+            this.addToMap(this.genre, tag.attributes.name.en);
+            break;
+          case "theme":
+            this.addToMap(this.theme, tag.attributes.name.en);
+            break;
+          case "format":
+            this.addToMap(this.format, tag.attributes.name.en);
+            break;
+        }
+      }
+
+      // Author
+      this.addToMap(this.author, mangaFull.author);
+      this.addToMap(this.artist, mangaFull.artist);
+
+      this.progress++;
+    }
   }
 }
 </script>
