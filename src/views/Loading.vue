@@ -31,6 +31,12 @@ import {
 } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
 import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
+import {
+  staticContentRating,
+  staticFollowStatus,
+  staticMangaStatus,
+  staticPublicationDemographic,
+} from "@/ts/model/static";
 
 export default class Loading extends Vue {
   private total = 0;
@@ -38,32 +44,10 @@ export default class Loading extends Vue {
   private anal_progress = 0;
   private errorMessage = "";
 
-  private followStatus = new Map<string, number>([
-    ["reading", 0],
-    ["re_reading", 0],
-    ["completed", 0],
-    ["on_hold", 0],
-    ["dropped", 0],
-    ["plan_to_read", 0],
-  ]);
-  private mangaStatus = new Map<string, number>([
-    ["ongoing", 0],
-    ["completed", 0],
-    ["hiatus", 0],
-    ["cancelled", 0],
-  ]);
-  private demographic = new Map<string, number>([
-    ["shounen", 0],
-    ["shoujo", 0],
-    ["josei", 0],
-    ["seinen", 0],
-  ]);
-  private contentRating = new Map<string, number>([
-    ["safe", 0],
-    ["suggestive", 0],
-    ["erotica", 0],
-    ["pornographic", 0],
-  ]);
+  private followStatus = new Map<string, number>(staticFollowStatus.map((v) => [v, 0]));
+  private mangaStatus = new Map<string, number>(staticMangaStatus.map((v) => [v, 0]));
+  private demographic = new Map<string, number>(staticPublicationDemographic.map((v) => [v, 0]));
+  private contentRating = new Map<string, number>(staticContentRating.map((v) => [v, 0]));
   private originalLanguage = new Map<string, number>();
   private genre = new Map<string, number>();
   private theme = new Map<string, number>();
