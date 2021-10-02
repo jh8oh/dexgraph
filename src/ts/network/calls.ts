@@ -71,23 +71,30 @@ const getCover = async (coverId: string): Promise<AxiosResponse<CoverResponse>> 
 const getMangaRelated = async (
   session: string,
   mangaId: string,
-  authorId: string,
-  artistId: string,
-  coverId: string
+  authorId: string | undefined,
+  artistId: string | undefined,
+  coverId: string | undefined
 ): Promise<
-  [
-    PromiseSettledResult<AxiosResponse<MangaStatusResponse>>,
-    PromiseSettledResult<AxiosResponse<AuthorArtistResponse>>,
-    PromiseSettledResult<AxiosResponse<AuthorArtistResponse>>,
-    PromiseSettledResult<AxiosResponse<CoverResponse>>
-  ]
+  PromiseSettledResult<
+    | AxiosResponse<MangaStatusResponse>
+    | AxiosResponse<AuthorArtistResponse>
+    | AxiosResponse<CoverResponse>
+  >[]
 > => {
-  return await Promise.allSettled([
-    getMangaStatus(session, mangaId),
-    getAuthorArtist(authorId),
-    getAuthorArtist(artistId),
-    getCover(coverId),
-  ]);
+  const promiseArray = [];
+
+  promiseArray.push(getMangaStatus(session, mangaId));
+  if (authorId != undefined) {
+    promiseArray.push(getAuthorArtist(authorId));
+  }
+  if (artistId != undefined) {
+    promiseArray.push(getAuthorArtist(artistId));
+  }
+  if (coverId != undefined) {
+    promiseArray.push(getCover(coverId));
+  }
+
+  return await Promise.allSettled(promiseArray);
 };
 
 export { login, getMangaFollows, getMangaRelated };

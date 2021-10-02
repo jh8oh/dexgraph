@@ -7,10 +7,10 @@ export interface State {
   token: Token;
   followedMangas: {
     manga: Manga;
-    status: string;
-    author: AuthorArtist;
-    artist: AuthorArtist;
-    cover: Cover;
+    status: string | null;
+    author: AuthorArtist | null;
+    artist: AuthorArtist | null;
+    cover: Cover | null;
   }[];
 }
 
@@ -29,10 +29,10 @@ export const store = createStore<State>({
       state,
       manga: {
         manga: Manga;
-        status: string;
-        author: AuthorArtist;
-        artist: AuthorArtist;
-        cover: Cover;
+        status: string | null;
+        author: AuthorArtist | null;
+        artist: AuthorArtist | null;
+        cover: Cover | null;
       }
     ) {
       state.followedMangas.push(manga);

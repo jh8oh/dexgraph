@@ -6,7 +6,7 @@ const LOGIN_ENDPOINT = "auth/login";
 
 // Manga Endpoints
 const MANGA_FOLLOW_ENDPOINT = "user/follows/manga";
-const MANGA_STATUS_ENDPOINT = (id: string) => `user/${id}/status`;
+const MANGA_STATUS_ENDPOINT = (id: string) => `manga/${id}/status`;
 const AUTHOR_ARTIST_ENDPOINT = (id: string) => `author/${id}`;
 const COVER_ENDPOINT = (id: string) => `cover/${id}`;
 
