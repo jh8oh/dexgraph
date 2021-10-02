@@ -1,4 +1,4 @@
-import { AuthorArtist, Cover, Manga } from "@/ts/model/manga";
+import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
 import Token from "@/ts/model/token";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";

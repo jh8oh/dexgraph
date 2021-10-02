@@ -22,7 +22,7 @@ import {
   CoverResponse,
 } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
-import { AuthorArtist, Cover } from "@/ts/model/manga";
+import { AuthorArtist, Cover } from "@/ts/model/data";
 
 export default class Loading extends Vue {
   private total = 0;

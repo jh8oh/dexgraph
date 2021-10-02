@@ -1,5 +1,5 @@
 import Token from "./token";
-import { AuthorArtist, Cover, Manga } from "./manga";
+import { AuthorArtist, Cover, Manga } from "./data";
 
 interface Response {
   result: string;
