@@ -2,9 +2,17 @@
   <div id="loading" class="page">
     <div id="loading-content">
       <img src="../assets/spinner-light.svg" />
-      <p>{{ description }}</p>
-      <progress :value="progress" :max="total" />
       <p id="error">{{ errorMessage }}</p>
+      <div class="table">
+        <div class="table-row">
+          <span>Getting your followed manga</span>
+          <progress :value="get_progress" :max="total" />
+        </div>
+        <div class="table-row">
+          <span>Analysing your manga</span>
+          <progress :value="anal_progress" :max="total" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -26,8 +34,8 @@ import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
 
 export default class Loading extends Vue {
   private total = 0;
-  private progress = 0;
-  private description = "";
+  private get_progress = 0;
+  private anal_progress = 0;
   private errorMessage = "";
 
   private followStatus = new Map<string, number>([
@@ -74,8 +82,6 @@ export default class Loading extends Vue {
   }
 
   private getAllMangaFollows(): void {
-    this.description = "Grabbing your followed manga";
-
     const session = store.state.token.session;
 
     // Grab followed manga statuses
@@ -130,9 +136,9 @@ export default class Loading extends Vue {
                   let cover = covers[index];
 
                   store.commit("addManga", { manga, status, author, artist, cover });
-                  this.progress++;
+                  this.get_progress++;
 
-                  if (this.progress === this.total) {
+                  if (this.get_progress === this.total) {
                     this.sortManga();
                   }
                 });
@@ -150,17 +156,14 @@ export default class Loading extends Vue {
 
   private addToMap<K>(map: Map<K, number>, value: K) {
     if (map.has(value)) {
-      let number = map.get(value)!;
-      map.set(value, number + 1);
+      let number = map.get(value);
+      map.set(value, number ? number + 1 : 1);
     } else {
       map.set(value, 1);
     }
   }
 
   private sortManga(): void {
-    this.description = "Analysing your followed manga";
-    this.progress = 0;
-
     const followedMangas = store.state.followedMangas;
     for (const mangaFull of followedMangas) {
       this.addToMap(this.followStatus, mangaFull.status); // Status
@@ -188,7 +191,7 @@ export default class Loading extends Vue {
       this.addToMap(this.author, mangaFull.author);
       this.addToMap(this.artist, mangaFull.artist);
 
-      this.progress++;
+      this.anal_progress++;
     }
   }
 }
