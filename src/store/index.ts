@@ -9,7 +9,7 @@ export interface State {
   // Followed manga list
   followedMangas: {
     manga: Manga;
-    status: string | null;
+    status: string;
     author: AuthorArtist | null;
     artist: AuthorArtist | null;
     cover: Cover | null;
@@ -53,7 +53,7 @@ export const store = createStore<State>({
       state,
       manga: {
         manga: Manga;
-        status: string | null;
+        status: string;
         author: AuthorArtist | null;
         artist: AuthorArtist | null;
         cover: Cover | null;

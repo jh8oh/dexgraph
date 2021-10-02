@@ -61,7 +61,7 @@ export default class Loading extends Vue {
     getMangaStatus(session)
       .then((response: AxiosResponse<MangaStatusResponse>) => {
         let statuses = response.data.statuses;
-        let statusesEntries = Object.entries(statuses);
+        let statusesEntries = Object.entries(statuses) as [string, string][];
 
         this.total = statusesEntries.length;
 
@@ -127,12 +127,14 @@ export default class Loading extends Vue {
       });
   }
 
-  private addToMap<K>(map: Map<K, number>, value: K) {
-    if (map.has(value)) {
-      let number = map.get(value);
-      map.set(value, number ? number + 1 : 1);
-    } else {
-      map.set(value, 1);
+  private addToMap(map: Map<string, number>, value: string | undefined) {
+    if (value != undefined) {
+      if (map.has(value)) {
+        let number = map.get(value);
+        map.set(value, number ? number + 1 : 1);
+      } else {
+        map.set(value, 1);
+      }
     }
   }
 
@@ -153,8 +155,8 @@ export default class Loading extends Vue {
     let genreCount = new Map<string, number>();
     let themeCount = new Map<string, number>();
     let formatCount = new Map<string, number>();
-    let authorCount = new Map<AuthorArtist, number>();
-    let artistCount = new Map<AuthorArtist, number>();
+    let authorCount = new Map<string, number>();
+    let artistCount = new Map<string, number>();
 
     const followedMangas = store.state.followedMangas;
     for (const mangaFull of followedMangas) {
@@ -180,8 +182,8 @@ export default class Loading extends Vue {
       }
 
       // Author
-      this.addToMap(authorCount, mangaFull.author);
-      this.addToMap(artistCount, mangaFull.artist);
+      this.addToMap(authorCount, mangaFull.author?.id);
+      this.addToMap(artistCount, mangaFull.artist?.id);
 
       this.anal_progress++;
     }
