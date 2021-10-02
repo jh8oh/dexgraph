@@ -30,6 +30,8 @@ export default class Loading extends Vue {
   private description = "";
   private errorMessage = "";
 
+  private authorArtistIdMap = new Map<string, AuthorArtist>();
+
   mounted(): void {
     this.getAllMangaFollows();
   }
@@ -50,21 +52,43 @@ export default class Loading extends Vue {
               let followedManga = response.data.data;
               followedManga.forEach((manga) => {
                 const mangaId = manga.id;
-                const authorId = manga.relationships.find(
+                let authorId = manga.relationships.find(
                   (relationship) => relationship.type === "author"
                 )?.id;
-                const artistId = manga.relationships.find(
+                let artistId = manga.relationships.find(
                   (relationship) => relationship.type === "artist"
                 )?.id;
                 const coverId = manga.relationships.find(
                   (relationship) => relationship.type === "cover_art"
                 )?.id;
-                getMangaRelated(session, mangaId, authorId, artistId, coverId).then((responses) => {
-                  let status: string | null = null;
-                  let author: AuthorArtist | null = null;
-                  let artist: AuthorArtist | null = null;
-                  let cover: Cover | null = null;
 
+                let status: string | undefined = undefined;
+                let author: AuthorArtist | undefined = undefined;
+                let artist: AuthorArtist | undefined = undefined;
+                let sameArtist = false;
+                let cover: Cover | undefined = undefined;
+
+                // Check if author/artist has been searched before
+                if (authorId != undefined) {
+                  if (this.authorArtistIdMap.has(authorId)) {
+                    author = this.authorArtistIdMap.get(authorId);
+                    authorId = undefined;
+                  }
+                }
+                if (artistId != undefined) {
+                  if (this.authorArtistIdMap.has(artistId)) {
+                    artist = this.authorArtistIdMap.get(artistId);
+                    artistId = undefined;
+                  }
+                }
+
+                // Check if author/artist are the same
+                if (authorId === artistId) {
+                  artistId = undefined;
+                  sameArtist = true;
+                }
+
+                getMangaRelated(session, mangaId, authorId, artistId, coverId).then((responses) => {
                   // Manga status
                   if (responses[0].status === "fulfilled") {
                     status = (
@@ -72,29 +96,43 @@ export default class Loading extends Vue {
                     ).value.data.status;
                   }
 
+                  let index = 1;
+
                   // Author
-                  if (authorId != null) {
-                    if (responses[1].status === "fulfilled") {
+                  if (authorId != undefined) {
+                    if (responses[index].status === "fulfilled") {
                       author = (
-                        responses[1] as PromiseFulfilledResult<AxiosResponse<AuthorArtistResponse>>
+                        responses[index] as PromiseFulfilledResult<
+                          AxiosResponse<AuthorArtistResponse>
+                        >
                       ).value.data.data;
+                      this.authorArtistIdMap.set(authorId, author);
                     }
+                    index++;
                   }
 
                   // Artist
-                  if (artistId != null) {
-                    if (responses[2].status === "fulfilled") {
+                  if (artistId != undefined) {
+                    if (responses[index].status === "fulfilled") {
                       artist = (
-                        responses[2] as PromiseFulfilledResult<AxiosResponse<AuthorArtistResponse>>
+                        responses[index] as PromiseFulfilledResult<
+                          AxiosResponse<AuthorArtistResponse>
+                        >
                       ).value.data.data;
+                      this.authorArtistIdMap.set(artistId, artist);
                     }
+                    index++;
+                  }
+                  if (sameArtist) {
+                    artist = author;
                   }
 
                   // Cover
-                  if (coverId != null) {
-                    if (responses[3].status === "fulfilled") {
-                      cover = (responses[3] as PromiseFulfilledResult<AxiosResponse<CoverResponse>>)
-                        .value.data.data;
+                  if (coverId != undefined) {
+                    if (responses[index].status === "fulfilled") {
+                      cover = (
+                        responses[index] as PromiseFulfilledResult<AxiosResponse<CoverResponse>>
+                      ).value.data.data;
                     }
                   }
 
