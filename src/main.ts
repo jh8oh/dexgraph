@@ -5,5 +5,5 @@ import { store, key } from "./store";
 import axiosThrottle from "axios-request-throttle";
 import axios from "axios";
 
-axiosThrottle.use(axios, { requestsPerSecond: 5 });
+axiosThrottle.use(axios, { requestsPerSecond: 10 });
 createApp(App).use(store, key).use(router).mount("#app");
