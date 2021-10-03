@@ -5,11 +5,17 @@
         Log in to <span id="mangadex"><strong>MangaDex</strong></span>
       </h1>
       <label class="input-text">
-        <input v-model="username" type="text" required />
+        <input v-model="username" type="text" @keyup.enter="focusPassword()" required />
         <span>Username/Email</span>
       </label>
       <label class="input-text">
-        <input v-model="password" type="password" required />
+        <input
+          ref="input_password"
+          v-model="password"
+          type="password"
+          @keyup.enter="login()"
+          required
+        />
         <span>Password</span>
       </label>
       <p id="error">{{ errorMessage }}</p>
@@ -31,6 +37,14 @@ export default class Login extends Vue {
   private username = "";
   private password = "";
   private errorMessage = "";
+
+  $refs!: {
+    input_password: HTMLInputElement;
+  };
+
+  private focusPassword() {
+    this.$refs.input_password.focus();
+  }
 
   private login() {
     // Validate username and checks if email
