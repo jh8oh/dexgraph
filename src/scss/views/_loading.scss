@@ -1,0 +1,56 @@
+// ---------------------------------------------------------------------------
+// This file contains styles that are specific to the "Loading" page.
+// ---------------------------------------------------------------------------
+
+#loading {
+    &-content {
+        @extend %absolute-center;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+
+        & > * {
+            margin-bottom: 8px;
+        }
+    }
+    progress {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 25px;
+        width: 300px;
+
+        &::-webkit-progress-bar {
+            background-color: $color-background-variant;
+        }
+
+        &::-webkit-progress-value {
+            background-color: $color-primary;
+        }
+    }
+
+    #error {
+        color: $color-error;
+    }
+
+    .table {
+        display: table;
+
+        &-row {
+            display: table-row;
+
+            & > * {
+                display: table-cell;
+                text-align: end;
+                padding-bottom: 8px;
+
+                &:not(:first-child) {
+                    padding-left: 16px;
+                }
+            }
+
+            span {
+                vertical-align: middle;
+            }
+        }
+    }
+}
