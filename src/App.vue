@@ -1,7 +1,5 @@
 <template>
-  <div id="content">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <style lang="scss" src="./scss/main.scss" />
