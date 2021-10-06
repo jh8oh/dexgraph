@@ -26,11 +26,11 @@ import {
   ErrorResponse,
   MangaStatusResponse,
   MangaResponse,
-  AuthorArtistResponse,
+  StaffResponse,
   CoverResponse,
 } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
-import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
+import { Staff, Cover, Manga } from "@/ts/model/data";
 import {
   staticContentRating,
   staticFollowStatus,
@@ -78,22 +78,20 @@ export default class Loading extends Vue {
               let coverIds = this.getRelationshipIds(followedManga, "cover_art");
 
               getMangaRelated(authorIds, artistIds, coverIds).then((responses) => {
-                let authors: AuthorArtist[];
-                let artists: AuthorArtist[];
+                let authors: Staff[];
+                let artists: Staff[];
                 let covers: Cover[];
 
                 // Author
                 if (responses[0].status === "fulfilled") {
-                  authors = (
-                    responses[0] as PromiseFulfilledResult<AxiosResponse<AuthorArtistResponse>>
-                  ).value.data.data;
+                  authors = (responses[0] as PromiseFulfilledResult<AxiosResponse<StaffResponse>>)
+                    .value.data.data;
                 }
 
                 // Artist
                 if (responses[1].status === "fulfilled") {
-                  artists = (
-                    responses[1] as PromiseFulfilledResult<AxiosResponse<AuthorArtistResponse>>
-                  ).value.data.data;
+                  artists = (responses[1] as PromiseFulfilledResult<AxiosResponse<StaffResponse>>)
+                    .value.data.data;
                 }
 
                 // Cover
@@ -189,7 +187,7 @@ export default class Loading extends Vue {
     }
 
     // Save values
-    const commitCount = (type: string, payloads: ([string, number] | [AuthorArtist, number])[]) => {
+    const commitCount = (type: string, payloads: ([string, number] | [Staff, number])[]) => {
       payloads.forEach((p) => {
         store.commit(type, p);
       });

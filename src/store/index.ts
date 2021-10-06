@@ -1,4 +1,4 @@
-import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
+import { Staff, Cover, Manga, MangaFull } from "@/ts/model/data";
 import Token from "@/ts/model/token";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
@@ -7,13 +7,7 @@ export interface State {
   token: Token;
 
   // Followed manga list
-  followedMangas: {
-    manga: Manga;
-    status: string;
-    author: AuthorArtist | null;
-    artist: AuthorArtist | null;
-    cover: Cover | null;
-  }[];
+  followedMangas: MangaFull[];
 
   // Followed data
   followStatusCount: [string, number][];
@@ -24,8 +18,8 @@ export interface State {
   genreCount: [string, number][];
   themeCount: [string, number][];
   formatCount: [string, number][];
-  authorCount: [AuthorArtist, number][];
-  artistCount: [AuthorArtist, number][];
+  authorCount: [Staff, number][];
+  artistCount: [Staff, number][];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -49,16 +43,7 @@ export const store = createStore<State>({
     setToken(state, token: Token) {
       state.token = token;
     },
-    addManga(
-      state,
-      manga: {
-        manga: Manga;
-        status: string;
-        author: AuthorArtist | null;
-        artist: AuthorArtist | null;
-        cover: Cover | null;
-      }
-    ) {
+    addManga(state, manga: MangaFull) {
       state.followedMangas.push(manga);
     },
     addFollowStatusCount(state, count: [string, number]) {
@@ -85,10 +70,10 @@ export const store = createStore<State>({
     addFormatCount(state, count: [string, number]) {
       state.formatCount.push(count);
     },
-    addAuthorCount(state, count: [AuthorArtist, number]) {
+    addAuthorCount(state, count: [Staff, number]) {
       state.authorCount.push(count);
     },
-    addArtistCount(state, count: [AuthorArtist, number]) {
+    addArtistCount(state, count: [Staff, number]) {
       state.artistCount.push(count);
     },
   },

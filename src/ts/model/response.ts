@@ -1,5 +1,5 @@
 import Token from "./token";
-import { AuthorArtist, Cover, Manga } from "./data";
+import { Staff, Cover, Manga } from "./data";
 
 interface Response {
   result: string;
@@ -32,9 +32,9 @@ export interface MangaResponse extends Response {
   total: number;
 }
 
-export interface AuthorArtistResponse extends Response {
+export interface StaffResponse extends Response {
   response: string;
-  data: AuthorArtist[];
+  data: Staff[];
   limit: number;
   offset: number;
   total: number;
