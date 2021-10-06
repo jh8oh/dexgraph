@@ -1,3 +1,8 @@
+export interface Token {
+  session: string;
+  refresh: string;
+}
+
 // Generic
 interface Attributes {
   version: number;
