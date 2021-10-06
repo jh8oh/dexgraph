@@ -17,6 +17,14 @@ interface Object<T extends Attributes> {
   type: string;
 }
 
+// User
+interface UserAttributes extends Attributes {
+  username: string;
+  roles: string[];
+}
+
+export type User = Object<UserAttributes>;
+
 // Manga
 interface TagAttributes extends Attributes {
   description: { en: string };

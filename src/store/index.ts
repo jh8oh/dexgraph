@@ -6,6 +6,9 @@ import { createStore, Store } from "vuex";
 export interface State {
   token: Token;
 
+  // User info
+  username: string;
+
   // Followed manga list
   followedMangas: MangaFull[];
 
@@ -23,6 +26,7 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: {
     token: { session: "", refresh: "" },
+    username: "",
     followedMangas: [],
     originalLanguages: [],
     genres: [],
@@ -34,6 +38,9 @@ export const store = createStore<State>({
   mutations: {
     setToken(state, token: Token) {
       state.token = token;
+    },
+    setUsername(state, username: string) {
+      state.username = username;
     },
     addManga(state, manga: MangaFull) {
       state.followedMangas.push(manga);

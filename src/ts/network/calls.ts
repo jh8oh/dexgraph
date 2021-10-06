@@ -6,6 +6,7 @@ import {
   LOGIN_ENDPOINT,
   MANGA_ENDPOINT,
   MANGA_STATUS_ENDPOINT,
+  LOGGED_USER_ENDPOINT,
 } from "./config";
 import {
   StaffResponse,
@@ -13,6 +14,7 @@ import {
   LoginResponse,
   MangaResponse,
   MangaStatusResponse,
+  UserResponse,
 } from "../model/response";
 
 export const login = async (
@@ -29,11 +31,9 @@ export const login = async (
   return response;
 };
 
-export const getMangaStatus = async (
-  session: string
-): Promise<AxiosResponse<MangaStatusResponse>> => {
+export const getUser = async (session: string): Promise<AxiosResponse<UserResponse>> => {
   const bearer = { Authorization: `Bearer ${session}` };
-  return await axios.get(HOST_URL + MANGA_STATUS_ENDPOINT, {
+  return await axios.get(HOST_URL + LOGGED_USER_ENDPOINT, {
     headers: bearer,
   });
 };
@@ -51,6 +51,15 @@ export const getManga = async (
   });
 
   return response;
+};
+
+export const getMangaStatus = async (
+  session: string
+): Promise<AxiosResponse<MangaStatusResponse>> => {
+  const bearer = { Authorization: `Bearer ${session}` };
+  return await axios.get(HOST_URL + MANGA_STATUS_ENDPOINT, {
+    headers: bearer,
+  });
 };
 
 const getStaff = async (

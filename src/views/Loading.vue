@@ -13,7 +13,7 @@
 import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import { AxiosError, AxiosResponse } from "axios";
-import { getMangaStatus, getManga, getMangaRelated } from "@/ts/network/calls";
+import { getUser, getMangaStatus, getManga, getMangaRelated } from "@/ts/network/calls";
 import {
   ErrorResponse,
   MangaStatusResponse,
@@ -29,8 +29,21 @@ export default class Loading extends Vue {
   private progress = 0;
   private errorMessage = "";
 
+  private session = store.state.token.session;
+
   mounted(): void {
+    this.getUsername();
     this.getAllMangaFollows();
+  }
+
+  private getUsername() {
+    getUser(this.session)
+      .then((response) => {
+        store.commit("setUsername", response.data.data.attributes.username);
+      })
+      .catch((error: AxiosError<ErrorResponse>) => {
+        this.errorMessage = handleErrorMessage(error);
+      });
   }
 
   private getRelationshipIds(followedManga: Manga[], type: string): (string | undefined)[] {
@@ -40,10 +53,8 @@ export default class Loading extends Vue {
   }
 
   private getAllMangaFollows(): void {
-    const session = store.state.token.session;
-
     // Grab followed manga statuses
-    getMangaStatus(session)
+    getMangaStatus(this.session)
       .then((response: AxiosResponse<MangaStatusResponse>) => {
         let statuses = response.data.statuses;
         let statusesEntries = Object.entries(statuses) as [string, string][];

@@ -1,5 +1,5 @@
 import Token from "./token";
-import { Staff, Cover, Manga } from "./data";
+import { Staff, Cover, Manga, User } from "./data";
 
 interface Response {
   result: string;
@@ -18,6 +18,11 @@ export interface ErrorResponse extends Response {
 
 export interface LoginResponse extends Response {
   token: Token;
+}
+
+export interface UserResponse extends Response {
+  response: string;
+  data: User;
 }
 
 export interface MangaStatusResponse extends Response {
