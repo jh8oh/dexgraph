@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import {
-  AUTHOR_ARTIST_ENDPOINT,
+  STAFF_ENDPOINT,
   COVER_ENDPOINT,
   HOST_URL,
   LOGIN_ENDPOINT,
@@ -8,7 +8,7 @@ import {
   MANGA_STATUS_ENDPOINT,
 } from "./config";
 import {
-  AuthorArtistResponse,
+  StaffResponse,
   CoverResponse,
   LoginResponse,
   MangaResponse,
@@ -53,11 +53,11 @@ export const getManga = async (
   return response;
 };
 
-const getAuthorArtist = async (
+const getStaff = async (
   authorIds: (string | undefined)[]
-): Promise<AxiosResponse<AuthorArtistResponse>> => {
+): Promise<AxiosResponse<StaffResponse>> => {
   const body = { limit: 100, ids: authorIds };
-  return await axios.get(HOST_URL + AUTHOR_ARTIST_ENDPOINT, {
+  return await axios.get(HOST_URL + STAFF_ENDPOINT, {
     params: body,
   });
 };
@@ -75,12 +75,6 @@ export const getMangaRelated = async (
   authorIds: (string | undefined)[],
   artistIds: (string | undefined)[],
   coverIds: (string | undefined)[]
-): Promise<
-  PromiseSettledResult<AxiosResponse<AuthorArtistResponse> | AxiosResponse<CoverResponse>>[]
-> => {
-  return await Promise.allSettled([
-    getAuthorArtist(authorIds),
-    getAuthorArtist(artistIds),
-    getCover(coverIds),
-  ]);
+): Promise<PromiseSettledResult<AxiosResponse<StaffResponse> | AxiosResponse<CoverResponse>>[]> => {
+  return await Promise.allSettled([getStaff(authorIds), getStaff(artistIds), getCover(coverIds)]);
 };
