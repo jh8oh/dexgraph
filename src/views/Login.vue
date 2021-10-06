@@ -28,9 +28,9 @@
 import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import router from "@/router";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { login } from "@/ts/network/calls";
-import { LoginResponse, ErrorResponse } from "@/ts/model/response";
+import { ErrorResponse } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
 
 export default class Login extends Vue {
@@ -69,7 +69,7 @@ export default class Login extends Vue {
 
     // Call MangaDex API
     login(this.username, this.password, isEmail)
-      .then((response: AxiosResponse<LoginResponse>) => {
+      .then((response) => {
         store.commit("setToken", response.data.token);
         router.push("loading");
       })

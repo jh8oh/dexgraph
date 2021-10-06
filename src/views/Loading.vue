@@ -14,13 +14,7 @@ import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import { AxiosError, AxiosResponse } from "axios";
 import { getUser, getMangaStatus, getManga, getMangaRelated } from "@/ts/network/calls";
-import {
-  ErrorResponse,
-  MangaStatusResponse,
-  MangaResponse,
-  StaffResponse,
-  CoverResponse,
-} from "@/ts/model/response";
+import { ErrorResponse, StaffResponse, CoverResponse } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
 import { Staff, Cover, Manga } from "@/ts/model/data";
 
@@ -55,7 +49,7 @@ export default class Loading extends Vue {
   private getAllMangaFollows(): void {
     // Grab followed manga statuses
     getMangaStatus(this.session)
-      .then((response: AxiosResponse<MangaStatusResponse>) => {
+      .then((response) => {
         let statuses = response.data.statuses;
         let statusesEntries = Object.entries(statuses) as [string, string][];
 
@@ -67,7 +61,7 @@ export default class Loading extends Vue {
           });
 
           getManga(mangaIds)
-            .then((response: AxiosResponse<MangaResponse>) => {
+            .then((response) => {
               let followedManga = response.data.data;
               let authorIds = this.getRelationshipIds(followedManga, "author");
               let artistIds = this.getRelationshipIds(followedManga, "artist");
