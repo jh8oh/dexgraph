@@ -1,3 +1,8 @@
+export interface Token {
+  session: string;
+  refresh: string;
+}
+
 // Generic
 interface Attributes {
   version: number;
@@ -16,6 +21,14 @@ interface Object<T extends Attributes> {
   relationships: Relationship[];
   type: string;
 }
+
+// User
+interface UserAttributes extends Attributes {
+  username: string;
+  roles: string[];
+}
+
+export type User = Object<UserAttributes>;
 
 // Manga
 interface TagAttributes extends Attributes {
@@ -54,7 +67,7 @@ interface MangaAttributes extends Attributes {
 export type Manga = Object<MangaAttributes>;
 
 // Author/Artist
-interface AuthorArtistAttributes extends Attributes {
+interface StaffAttributes extends Attributes {
   name: string;
   imageUrl: string;
   twitter: string;
@@ -70,7 +83,7 @@ interface AuthorArtistAttributes extends Attributes {
   website: string;
 }
 
-export type AuthorArtist = Object<AuthorArtistAttributes>;
+export type Staff = Object<StaffAttributes>;
 
 // Cover
 interface CoverAttributes extends Attributes {
@@ -80,3 +93,11 @@ interface CoverAttributes extends Attributes {
 }
 
 export type Cover = Object<CoverAttributes>;
+
+export interface MangaFull {
+  manga: Manga;
+  status: string;
+  author: Staff;
+  artist: Staff;
+  cover: Cover;
+}

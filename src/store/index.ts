@@ -1,31 +1,23 @@
-import { AuthorArtist, Cover, Manga } from "@/ts/model/data";
-import Token from "@/ts/model/token";
+import { Token, MangaFull } from "@/ts/model/data";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 
 export interface State {
   token: Token;
 
-  // Followed manga list
-  followedMangas: {
-    manga: Manga;
-    status: string;
-    author: AuthorArtist | null;
-    artist: AuthorArtist | null;
-    cover: Cover | null;
-  }[];
+  // User info
+  username: string;
 
-  // Followed data
-  followStatusCount: [string, number][];
-  mangaStatusCount: [string, number][];
-  demographicCount: [string, number][];
-  contentRatingCount: [string, number][];
-  originalLanguageCount: [string, number][];
-  genreCount: [string, number][];
-  themeCount: [string, number][];
-  formatCount: [string, number][];
-  authorCount: [AuthorArtist, number][];
-  artistCount: [AuthorArtist, number][];
+  // Followed manga list
+  followedMangas: MangaFull[];
+
+  // Dynamic data
+  originalLanguages: string[];
+  genres: string[];
+  themes: string[];
+  formats: string[];
+  authors: string[];
+  artists: string[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -33,63 +25,42 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: {
     token: { session: "", refresh: "" },
+    username: "",
     followedMangas: [],
-    followStatusCount: [],
-    mangaStatusCount: [],
-    demographicCount: [],
-    contentRatingCount: [],
-    originalLanguageCount: [],
-    genreCount: [],
-    themeCount: [],
-    formatCount: [],
-    authorCount: [],
-    artistCount: [],
+    originalLanguages: [],
+    genres: [],
+    themes: [],
+    formats: [],
+    authors: [],
+    artists: [],
   },
   mutations: {
     setToken(state, token: Token) {
       state.token = token;
     },
-    addManga(
-      state,
-      manga: {
-        manga: Manga;
-        status: string;
-        author: AuthorArtist | null;
-        artist: AuthorArtist | null;
-        cover: Cover | null;
-      }
-    ) {
+    setUsername(state, username: string) {
+      state.username = username;
+    },
+    addManga(state, manga: MangaFull) {
       state.followedMangas.push(manga);
     },
-    addFollowStatusCount(state, count: [string, number]) {
-      state.followStatusCount.push(count);
+    addOriginalLanguage(state, originalLanguage: string) {
+      state.originalLanguages.push(originalLanguage);
     },
-    addMangaStatusCount(state, count: [string, number]) {
-      state.mangaStatusCount.push(count);
+    addGenre(state, genre: string) {
+      state.genres.push(genre);
     },
-    addDemographicCount(state, count: [string, number]) {
-      state.demographicCount.push(count);
+    addTheme(state, theme: string) {
+      state.themes.push(theme);
     },
-    addContentRatingCount(state, count: [string, number]) {
-      state.contentRatingCount.push(count);
+    addFormat(state, format: string) {
+      state.formats.push(format);
     },
-    addOriginalLanguageCount(state, count: [string, number]) {
-      state.originalLanguageCount.push(count);
+    addAuthor(state, author: string) {
+      state.authors.push(author);
     },
-    addGenreCount(state, count: [string, number]) {
-      state.genreCount.push(count);
-    },
-    addThemeCount(state, count: [string, number]) {
-      state.themeCount.push(count);
-    },
-    addFormatCount(state, count: [string, number]) {
-      state.formatCount.push(count);
-    },
-    addAuthorCount(state, count: [AuthorArtist, number]) {
-      state.authorCount.push(count);
-    },
-    addArtistCount(state, count: [AuthorArtist, number]) {
-      state.artistCount.push(count);
+    addArtist(state, artist: string) {
+      state.artists.push(artist);
     },
   },
 });

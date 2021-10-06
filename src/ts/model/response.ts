@@ -1,10 +1,10 @@
-import Token from "./token";
-import { AuthorArtist, Cover, Manga } from "./data";
+import { Token, Staff, Cover, Manga, User } from "./data";
 
 interface Response {
   result: string;
 }
 
+// Errors
 interface Error {
   id: string;
   status: number;
@@ -16,14 +16,18 @@ export interface ErrorResponse extends Response {
   errors: Array<Error>;
 }
 
+// Auth
 export interface LoginResponse extends Response {
   token: Token;
 }
 
-export interface MangaStatusResponse extends Response {
-  statuses: object;
+// User
+export interface UserResponse extends Response {
+  response: string;
+  data: User;
 }
 
+// Manga
 export interface MangaResponse extends Response {
   response: string;
   data: Manga[];
@@ -32,9 +36,13 @@ export interface MangaResponse extends Response {
   total: number;
 }
 
-export interface AuthorArtistResponse extends Response {
+export interface MangaStatusResponse extends Response {
+  statuses: object;
+}
+
+export interface StaffResponse extends Response {
   response: string;
-  data: AuthorArtist[];
+  data: Staff[];
   limit: number;
   offset: number;
   total: number;
