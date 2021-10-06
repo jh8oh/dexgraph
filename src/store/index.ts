@@ -1,5 +1,4 @@
-import { MangaFull } from "@/ts/model/data";
-import Token from "@/ts/model/token";
+import { Token, MangaFull } from "@/ts/model/data";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 

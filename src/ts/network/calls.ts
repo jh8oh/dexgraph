@@ -22,13 +22,11 @@ export const login = async (
   password: string,
   isEmail: boolean
 ): Promise<AxiosResponse<LoginResponse>> => {
-  const response = await axios.post(HOST_URL + LOGIN_ENDPOINT, {
+  return await axios.post(HOST_URL + LOGIN_ENDPOINT, {
     username: isEmail ? "" : username,
     email: isEmail ? username : "",
     password: password,
   });
-
-  return response;
 };
 
 export const getUser = async (session: string): Promise<AxiosResponse<UserResponse>> => {
@@ -46,11 +44,9 @@ export const getManga = async (
     ids: mangaIds,
     contentRating: ["safe", "suggestive", "erotica", "pornographic"],
   };
-  const response = await axios.get(HOST_URL + MANGA_ENDPOINT, {
+  return await axios.get(HOST_URL + MANGA_ENDPOINT, {
     params: body,
   });
-
-  return response;
 };
 
 export const getMangaStatus = async (
