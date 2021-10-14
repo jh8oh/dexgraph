@@ -1,0 +1,40 @@
+// ---------------------------------------------------------------------------
+// This file contains all styles related to the "Button" component.
+// ---------------------------------------------------------------------------
+
+#manga-list {
+    ul {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        align-items: stretch;
+        @extend %no-whitespace;
+        list-style-type: none;
+    }
+
+    li {
+        flex: 0 0 256px;
+        height: 360px;
+        position: relative;
+        margin-bottom: 8px;
+    }
+
+    figure {
+        cursor: pointer;
+        @extend %no-whitespace;
+    }
+
+    img {
+        width: 256px;
+        height: 360px;
+    }
+
+    figcaption {
+        position: absolute;
+        width: 256px;
+        bottom: 0;
+        text-align: center;
+        color: white;
+        background: rgba(46, 49, 49, 0.6);
+    }
+}
