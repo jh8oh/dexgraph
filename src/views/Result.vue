@@ -1,17 +1,21 @@
 <template>
   <div id="result" class="page">
-    <h1>{{ username }}</h1>
-    <ul id="result-sidebar">
-      <li
-        v-for="tab in tabs"
-        :key="tab"
-        v-bind:class="['tab-button', { active: currentTab === tab }]"
-        @click="currentTab = tab.replace(/\s/g, '')"
-      >
-        {{ tab }}
-      </li>
-    </ul>
-    <component v-bind:is="currentTab" class="result-tab"></component>
+    <div id="result-content">
+      <h1>{{ username }}</h1>
+      <div id="result-component">
+        <ul id="result-sidebar">
+          <li
+            v-for="tab in tabs"
+            :key="tab"
+            v-bind:class="['tab-button', { active: currentTab === tab.replace(/\s/g, '') }]"
+            @click="currentTab = tab.replace(/\s/g, '')"
+          >
+            <strong>{{ tab }}</strong>
+          </li>
+        </ul>
+        <component v-bind:is="currentTab" class="result-tab"></component>
+      </div>
+    </div>
   </div>
 </template>
 
