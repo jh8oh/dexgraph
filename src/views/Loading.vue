@@ -92,9 +92,9 @@ export default class Loading extends Vue {
 
                 followedManga.forEach((manga, index) => {
                   let status = statusesEntries[index][1];
-                  let author = authors[index];
-                  let artist = artists[index];
-                  let cover = covers[index];
+                  let author = authors.find((a) => a.id === authorIds[index]);
+                  let artist = artists.find((a) => a.id === artistIds[index]);
+                  let cover = covers.find((c) => c.id === coverIds[index]);
 
                   store.commit("addManga", { manga, status, author, artist, cover });
                   this.progress++;
