@@ -22,10 +22,10 @@
 <script lang="ts">
 import { store } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import Overview from "@/components/Overview.vue";
-import MangaList from "@/components/MangaList.vue";
-import Stats from "@/components/Stats.vue";
-import Staff from "@/components/Staff.vue";
+import Overview from "@/components/result/Overview.vue";
+import MangaList from "@/components/result/MangaList.vue";
+import Stats from "@/components/result/Stats.vue";
+import Staff from "@/components/result/Staff.vue";
 import {
   staticContentRating,
   staticFollowStatus,
