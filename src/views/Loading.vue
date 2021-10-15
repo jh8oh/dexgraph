@@ -119,7 +119,7 @@ export default class Loading extends Vue {
                   this.progress++;
 
                   if (this.progress === this.total) {
-                    this.sortManga();
+                    this.mangaFollowsCompleted = true;
                   }
                 });
               });
@@ -132,55 +132,6 @@ export default class Loading extends Vue {
       .catch((error: AxiosError<ErrorResponse>) => {
         this.errorMessage = handleErrorMessage(error);
       });
-  }
-
-  private sortManga(): void {
-    let originalLanguages = new Set<string>();
-    let genres = new Set<string>();
-    let themes = new Set<string>();
-    let formats = new Set<string>();
-    let authors = new Set<string>();
-    let artists = new Set<string>();
-
-    const followedMangas = store.state.followedMangas;
-    for (const mangaFull of followedMangas) {
-      originalLanguages.add(mangaFull.manga.attributes.originalLanguage); // Original Language
-
-      // Genre/Theme/Format
-      for (const tag of mangaFull.manga.attributes.tags) {
-        switch (tag.attributes.group) {
-          case "genre":
-            genres.add(tag.attributes.name.en);
-            break;
-          case "theme":
-            themes.add(tag.attributes.name.en);
-            break;
-          case "format":
-            formats.add(tag.attributes.name.en);
-            break;
-        }
-      }
-
-      // Author
-      authors.add(mangaFull.author?.id);
-      artists.add(mangaFull.artist?.id);
-    }
-
-    // Save values
-    const commits = (type: string, payloads: Set<string>) => {
-      payloads.forEach((p) => {
-        store.commit(type, p);
-      });
-    };
-
-    commits("addOriginalLanguage", originalLanguages);
-    commits("addGenre", genres);
-    commits("addTheme", themes);
-    commits("addFormat", formats);
-    commits("addAuthor", authors);
-    commits("addArtist", artists);
-
-    this.mangaFollowsCompleted = true;
   }
 }
 </script>
