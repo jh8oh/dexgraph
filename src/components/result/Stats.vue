@@ -4,16 +4,19 @@
     <div id="stats-graphs">
       <div>
         <h3>Follow Status</h3>
-        <PieChart :chartData="followStatusChartData" :chartOptions="chartOptions" />
+        <PieChart :chartData="followStatusChartData" :options="chartOptions" />
       </div>
       <div>
         <h3>Manga Status</h3>
+        <PieChart :chartData="mangaStatusChartData" :options="chartOptions" />
       </div>
       <div>
         <h3>Publication Demographic</h3>
+        <PieChart :chartData="publicationDemographicChartData" :options="chartOptions" />
       </div>
       <div>
         <h3>Content Rating</h3>
+        <PieChart :chartData="contentRatingChartData" :options="chartOptions" />
       </div>
     </div>
   </section>
@@ -29,10 +32,12 @@ import {
   staticPublicationDemographic,
 } from "@/ts/model/static";
 import { colors } from "@/ts/util/chart";
-import PieChart from "@/components/chart/PieChart.vue";
+import { PieChart } from "vue-chart-3";
 
-function toDisplayText(s: string): string {
+function toDisplayText(s: string | null): string {
   switch (s) {
+    case null:
+      return "None";
     case "re_reading":
       return "Rereading";
     default: {
@@ -42,36 +47,49 @@ function toDisplayText(s: string): string {
   }
 }
 
+function toChartData(map: Map<string | null, number>) {
+  return {
+    labels: Array.from<string | null>(map.keys()).map((s) => toDisplayText(s)),
+    datasets: [
+      {
+        data: Array.from<number>(map.values()),
+        backgroundColor: colors(map.size),
+      },
+    ],
+  };
+}
+
 @Options({
   components: {
     PieChart,
   },
   computed: {
     followStatusChartData() {
-      return {
-        labels: Array.from<string>(this.followStatus.keys()).map((s) => toDisplayText(s)),
-        datasets: [
-          {
-            data: Array.from<number>(this.followStatus.values()),
-            backgroundColor: colors(this.followStatus.size),
-          },
-        ],
-      };
+      return toChartData(this.followStatus);
+    },
+    mangaStatusChartData() {
+      return toChartData(this.mangaStatus);
+    },
+    publicationDemographicChartData() {
+      return toChartData(this.publicationDemographic);
+    },
+    contentRatingChartData() {
+      return toChartData(this.contentRating);
     },
   },
 })
 export default class Stats extends Vue {
   // Manga Stats
-  private followStatus = new Map<string, number>(staticFollowStatus.map((e) => [e, 0]));
-  private mangaStatus = new Map<string, number>(staticMangaStatus.map((e) => [e, 0]));
-  private publicationDemographic = new Map<string, number>(
+  private followStatus = new Map<string | null, number>(staticFollowStatus.map((e) => [e, 0]));
+  private mangaStatus = new Map<string | null, number>(staticMangaStatus.map((e) => [e, 0]));
+  private publicationDemographic = new Map<string | null, number>(
     staticPublicationDemographic.map((e) => [e, 0])
   );
-  private contentRating = new Map<string, number>(staticContentRating.map((e) => [e, 0]));
-  private originalLanguages = new Map<string, number>();
-  private genres = new Map<string, number>();
-  private themes = new Map<string, number>();
-  private formats = new Map<string, number>();
+  private contentRating = new Map<string | null, number>(staticContentRating.map((e) => [e, 0]));
+  private originalLanguages = new Map<string | null, number>();
+  private genres = new Map<string | null, number>();
+  private themes = new Map<string | null, number>();
+  private formats = new Map<string | null, number>();
 
   // Chart options
   private chartOptions = { responsive: true };
@@ -80,7 +98,7 @@ export default class Stats extends Vue {
     this.setUpMangaStats();
   }
 
-  private addToMap(map: Map<string, number>, key: string) {
+  private addToMap(map: Map<string | null, number>, key: string | null) {
     let value = map.get(key);
     map.set(key, value != undefined ? value + 1 : 1);
   }
