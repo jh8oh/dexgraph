@@ -4,19 +4,40 @@
     <div id="stats-graphs">
       <div>
         <h3>Follow Status</h3>
-        <PieChart :chartData="followStatusChartData" :options="chartOptions" />
+        <PieChart :chartData="followStatusChartData" :options="pieChartOptions" />
       </div>
       <div>
         <h3>Manga Status</h3>
-        <PieChart :chartData="mangaStatusChartData" :options="chartOptions" />
+        <PieChart :chartData="mangaStatusChartData" :options="pieChartOptions" />
       </div>
       <div>
         <h3>Publication Demographic</h3>
-        <PieChart :chartData="publicationDemographicChartData" :options="chartOptions" />
+        <PieChart :chartData="publicationDemographicChartData" :options="pieChartOptions" />
       </div>
       <div>
         <h3>Content Rating</h3>
-        <PieChart :chartData="contentRatingChartData" :options="chartOptions" />
+        <PieChart :chartData="contentRatingChartData" :options="pieChartOptions" />
+      </div>
+      <div>
+        <h3>Original Languages</h3>
+        <PieChart
+          v-if="originalLanguagesIsPie"
+          :chartData="originalLanguagesChartData"
+          :options="pieChartOptions"
+        />
+        <BarChart v-else :chartData="originalLanguagesChartData" :options="barChartOptions" />
+      </div>
+      <div>
+        <h3>Genre</h3>
+        <BarChart :chartData="genresChartData" :options="barChartOptions" />
+      </div>
+      <div>
+        <h3>Theme</h3>
+        <BarChart :chartData="themesChartData" :options="barChartOptions" />
+      </div>
+      <div>
+        <h3>Format</h3>
+        <BarChart :chartData="formatsChartData" :options="barChartOptions" />
       </div>
     </div>
   </section>
@@ -32,7 +53,7 @@ import {
   staticPublicationDemographic,
 } from "@/ts/model/static";
 import { colors } from "@/ts/util/chart";
-import { PieChart } from "vue-chart-3";
+import { PieChart, BarChart } from "vue-chart-3";
 
 function toDisplayText(s: string | null): string {
   switch (s) {
@@ -40,6 +61,14 @@ function toDisplayText(s: string | null): string {
       return "None";
     case "re_reading":
       return "Rereading";
+    case "ja":
+      return "Japanese";
+    case "ko":
+      return "Korean";
+    case "en":
+      return "English";
+    case "zh":
+      return "Chinese";
     default: {
       const toSpace = s.replace(/_/g, " ");
       return toSpace[0].toUpperCase() + toSpace.slice(1);
@@ -47,13 +76,22 @@ function toDisplayText(s: string | null): string {
   }
 }
 
-function toChartData(map: Map<string | null, number>) {
+function toChartData(map: Map<string | null, number>, isBar: boolean) {
+  let newMap = map;
+  if (isBar) {
+    newMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
+  }
+
+  let size = newMap.size > 10 ? 10 : newMap.size;
+
   return {
-    labels: Array.from<string | null>(map.keys()).map((s) => toDisplayText(s)),
+    labels: Array.from<string | null>(newMap.keys())
+      .slice(0, size)
+      .map((s) => toDisplayText(s)),
     datasets: [
       {
-        data: Array.from<number>(map.values()),
-        backgroundColor: colors(map.size),
+        data: Array.from<number>(newMap.values()).slice(0, size),
+        backgroundColor: colors(size),
       },
     ],
   };
@@ -62,19 +100,35 @@ function toChartData(map: Map<string | null, number>) {
 @Options({
   components: {
     PieChart,
+    BarChart,
   },
   computed: {
     followStatusChartData() {
-      return toChartData(this.followStatus);
+      return toChartData(this.followStatus, false);
     },
     mangaStatusChartData() {
-      return toChartData(this.mangaStatus);
+      return toChartData(this.mangaStatus, false);
     },
     publicationDemographicChartData() {
-      return toChartData(this.publicationDemographic);
+      return toChartData(this.publicationDemographic, false);
     },
     contentRatingChartData() {
-      return toChartData(this.contentRating);
+      return toChartData(this.contentRating, false);
+    },
+    originalLanguagesIsPie() {
+      return this.originalLanguages.size <= 6;
+    },
+    originalLanguagesChartData() {
+      return toChartData(this.originalLanguages, this.originalLanguagesIsPie);
+    },
+    genresChartData() {
+      return toChartData(this.genres, true);
+    },
+    themesChartData() {
+      return toChartData(this.themes, true);
+    },
+    formatsChartData() {
+      return toChartData(this.formats, true);
     },
   },
 })
@@ -92,7 +146,8 @@ export default class Stats extends Vue {
   private formats = new Map<string | null, number>();
 
   // Chart options
-  private chartOptions = { responsive: true };
+  private pieChartOptions = { responsive: true };
+  private barChartOptions = { responsive: true, plugins: { legend: { display: false } } };
 
   beforeMount(): void {
     this.setUpMangaStats();

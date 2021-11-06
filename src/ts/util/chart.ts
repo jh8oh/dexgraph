@@ -8,6 +8,7 @@ const COLORS = [
   "#00a95099",
   "#58595b99",
   "#8549ba99",
+  "#f4433699",
 ];
 
 export function colors(size: number): string[] {
