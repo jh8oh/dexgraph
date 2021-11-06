@@ -25,19 +25,24 @@
           :chartData="originalLanguagesChartData"
           :options="pieChartOptions"
         />
-        <BarChart v-else :chartData="originalLanguagesChartData" :options="barChartOptions" />
+        <BarChart
+          v-else
+          :chartData="originalLanguagesChartData"
+          :options="barChartOptions"
+          :width="800"
+        />
       </div>
       <div>
         <h3>Genre</h3>
-        <BarChart :chartData="genresChartData" :options="barChartOptions" />
+        <BarChart :chartData="genresChartData" :options="barChartOptions" :width="800" />
       </div>
       <div>
         <h3>Theme</h3>
-        <BarChart :chartData="themesChartData" :options="barChartOptions" />
+        <BarChart :chartData="themesChartData" :options="barChartOptions" :width="800" />
       </div>
       <div>
         <h3>Format</h3>
-        <BarChart :chartData="formatsChartData" :options="barChartOptions" />
+        <BarChart :chartData="formatsChartData" :options="barChartOptions" :width="800" />
       </div>
     </div>
   </section>
