@@ -35,14 +35,50 @@
       <div>
         <h3>Genre</h3>
         <BarChart :chartData="genresChartData" :options="barChartOptions" :width="800" />
+        <button
+          class="stat-change"
+          @click="genreMaxSize = genreMaxSize > 10 ? genreMaxSize - 5 : 10"
+        >
+          Remove
+        </button>
+        <button
+          class="stat-change"
+          @click="genreMaxSize = genreMaxSize < 20 ? genreMaxSize + 5 : 20"
+        >
+          Add
+        </button>
       </div>
       <div>
         <h3>Theme</h3>
         <BarChart :chartData="themesChartData" :options="barChartOptions" :width="800" />
+        <button
+          class="stat-change"
+          @click="themeMaxSize = themeMaxSize > 10 ? themeMaxSize - 5 : 10"
+        >
+          Remove
+        </button>
+        <button
+          class="stat-change"
+          @click="themeMaxSize = themeMaxSize < 20 ? themeMaxSize + 5 : 20"
+        >
+          Add
+        </button>
       </div>
       <div>
         <h3>Format</h3>
         <BarChart :chartData="formatsChartData" :options="barChartOptions" :width="800" />
+        <button
+          class="stat-change"
+          @click="formatMaxSize = formatMaxSize > 10 ? formatMaxSize - 5 : 10"
+        >
+          Remove
+        </button>
+        <button
+          class="stat-change"
+          @click="formatMaxSize = formatMaxSize < 20 ? formatMaxSize + 5 : 20"
+        >
+          Add
+        </button>
       </div>
     </div>
   </section>
@@ -81,13 +117,13 @@ function toDisplayText(s: string | null): string {
   }
 }
 
-function toChartData(map: Map<string | null, number>, isBar: boolean) {
+function toChartData(map: Map<string | null, number>, isBar: boolean, maxSize = 10) {
   let newMap = map;
   if (isBar) {
     newMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
   }
 
-  let size = newMap.size > 10 ? 10 : newMap.size;
+  let size = newMap.size > maxSize ? maxSize : newMap.size;
 
   return {
     labels: Array.from<string | null>(newMap.keys())
@@ -127,13 +163,13 @@ function toChartData(map: Map<string | null, number>, isBar: boolean) {
       return toChartData(this.originalLanguages, this.originalLanguagesIsPie);
     },
     genresChartData() {
-      return toChartData(this.genres, true);
+      return toChartData(this.genres, true, this.genreMaxSize);
     },
     themesChartData() {
-      return toChartData(this.themes, true);
+      return toChartData(this.themes, true, this.themeMaxSize);
     },
     formatsChartData() {
-      return toChartData(this.formats, true);
+      return toChartData(this.formats, true, this.formatMaxSize);
     },
   },
 })
@@ -151,6 +187,9 @@ export default class Stats extends Vue {
   private formats = new Map<string | null, number>();
 
   // Chart options
+  private genreMaxSize = 10;
+  private themeMaxSize = 10;
+  private formatMaxSize = 10;
   private pieChartOptions = { responsive: true };
   private barChartOptions = { responsive: true, plugins: { legend: { display: false } } };
 
