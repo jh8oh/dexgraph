@@ -17,6 +17,11 @@
         height: 360px;
         position: relative;
         margin-bottom: 8px;
+
+        @include breakpoint(1100px) {
+            flex: 0 0 172px;
+            height: 242px;
+        }
     }
 
     figure {
@@ -27,6 +32,11 @@
     img {
         width: 256px;
         height: 360px;
+
+        @include breakpoint(1100px) {
+            width: 172px;
+            height: 242px;
+        }
     }
 
     figcaption {
@@ -36,5 +46,10 @@
         text-align: center;
         color: white;
         background: rgba(46, 49, 49, 0.6);
+
+        @include breakpoint(1100px) {
+            width: 172px;
+            font-size: 12px;
+        }
     }
 }

@@ -4,7 +4,19 @@
 
 #result {
     &-content {
-        padding: 80px 18vw 40px;
+        margin: 80px 18vw 40px;
+
+        @include breakpoint(1440px) {
+            margin: 60px 12vw 30px;
+        }
+
+        @include breakpoint(1220px) {
+            margin: 40px 8vw 20px;
+        }
+
+        @include breakpoint(600px) {
+            margin: 40px 4vw 20px;
+        }
     }
 
     h1 {
