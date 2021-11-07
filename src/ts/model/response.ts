@@ -21,6 +21,12 @@ export interface LoginResponse extends Response {
   token: Token;
 }
 
+export interface CheckResponse extends Response {
+  isAuthenticated: boolean;
+  roles: string[];
+  permissions: string[];
+}
+
 // User
 export interface UserResponse extends Response {
   response: string;

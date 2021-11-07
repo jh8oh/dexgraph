@@ -4,20 +4,8 @@ import { createStore, Store } from "vuex";
 
 export interface State {
   token: Token;
-
-  // User info
-  username: string;
-
-  // Followed manga list
-  followedMangas: MangaFull[];
-
-  // Dynamic data
-  originalLanguages: string[];
-  genres: string[];
-  themes: string[];
-  formats: string[];
-  authors: string[];
-  artists: string[];
+  username: string; // User info
+  followedMangas: MangaFull[]; // Followed manga list
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -27,40 +15,36 @@ export const store = createStore<State>({
     token: { session: "", refresh: "" },
     username: "",
     followedMangas: [],
-    originalLanguages: [],
-    genres: [],
-    themes: [],
-    formats: [],
-    authors: [],
-    artists: [],
   },
   mutations: {
+    initialize(state) {
+      const token = localStorage.getItem("token");
+      if (token != null) {
+        state.token = JSON.parse(token);
+      }
+
+      const username = localStorage.getItem("username");
+      if (username != null) {
+        state.username = username;
+      }
+
+      const followedManga = localStorage.getItem("followedMangas");
+      if (followedManga != null) {
+        (JSON.parse(followedManga) as MangaFull[]).forEach((manga) => {
+          state.followedMangas.push(manga);
+        });
+      }
+    },
     setToken(state, token: Token) {
+      localStorage.setItem("token", JSON.stringify(token));
       state.token = token;
     },
     setUsername(state, username: string) {
+      localStorage.setItem("username", username);
       state.username = username;
     },
     addManga(state, manga: MangaFull) {
       state.followedMangas.push(manga);
-    },
-    addOriginalLanguage(state, originalLanguage: string) {
-      state.originalLanguages.push(originalLanguage);
-    },
-    addGenre(state, genre: string) {
-      state.genres.push(genre);
-    },
-    addTheme(state, theme: string) {
-      state.themes.push(theme);
-    },
-    addFormat(state, format: string) {
-      state.formats.push(format);
-    },
-    addAuthor(state, author: string) {
-      state.authors.push(author);
-    },
-    addArtist(state, artist: string) {
-      state.artists.push(artist);
     },
   },
 });

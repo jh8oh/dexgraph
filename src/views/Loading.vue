@@ -10,20 +10,38 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 import { store } from "@/store";
+import router from "@/router";
 import { AxiosError, AxiosResponse } from "axios";
 import { getUser, getMangaStatus, getManga, getMangaRelated } from "@/ts/network/calls";
 import { ErrorResponse, StaffResponse, CoverResponse } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
 import { Staff, Cover, Manga } from "@/ts/model/data";
 
+@Options({
+  computed: {
+    allComplete() {
+      return this.usernameCompleted && this.mangaFollowsCompleted;
+    },
+  },
+  watch: {
+    allComplete(newValue: boolean) {
+      if (newValue) {
+        router.push("result");
+      }
+    },
+  },
+})
 export default class Loading extends Vue {
   private total = 0;
   private progress = 0;
   private errorMessage = "";
 
   private session = store.state.token.session;
+
+  private usernameCompleted = false;
+  private mangaFollowsCompleted = false;
 
   mounted(): void {
     this.getUsername();
@@ -34,6 +52,7 @@ export default class Loading extends Vue {
     getUser(this.session)
       .then((response) => {
         store.commit("setUsername", response.data.data.attributes.username);
+        this.usernameCompleted = true;
       })
       .catch((error: AxiosError<ErrorResponse>) => {
         this.errorMessage = handleErrorMessage(error);
@@ -100,7 +119,7 @@ export default class Loading extends Vue {
                   this.progress++;
 
                   if (this.progress === this.total) {
-                    this.sortManga();
+                    this.mangaFollowsCompleted = true;
                   }
                 });
               });
@@ -113,53 +132,6 @@ export default class Loading extends Vue {
       .catch((error: AxiosError<ErrorResponse>) => {
         this.errorMessage = handleErrorMessage(error);
       });
-  }
-
-  private sortManga(): void {
-    let originalLanguages = new Set<string>();
-    let genres = new Set<string>();
-    let themes = new Set<string>();
-    let formats = new Set<string>();
-    let authors = new Set<string>();
-    let artists = new Set<string>();
-
-    const followedMangas = store.state.followedMangas;
-    for (const mangaFull of followedMangas) {
-      originalLanguages.add(mangaFull.manga.attributes.originalLanguage); // Original Language
-
-      // Genre/Theme/Format
-      for (const tag of mangaFull.manga.attributes.tags) {
-        switch (tag.attributes.group) {
-          case "genre":
-            genres.add(tag.attributes.name.en);
-            break;
-          case "theme":
-            themes.add(tag.attributes.name.en);
-            break;
-          case "format":
-            formats.add(tag.attributes.name.en);
-            break;
-        }
-      }
-
-      // Author
-      authors.add(mangaFull.author?.id);
-      artists.add(mangaFull.artist?.id);
-    }
-
-    // Save values
-    const commits = (type: string, payloads: Set<string>) => {
-      payloads.forEach((p) => {
-        store.commit(type, p);
-      });
-    };
-
-    commits("addOriginalLanguage", originalLanguages);
-    commits("addGenre", genres);
-    commits("addTheme", themes);
-    commits("addFormat", formats);
-    commits("addAuthor", authors);
-    commits("addArtist", artists);
   }
 }
 </script>

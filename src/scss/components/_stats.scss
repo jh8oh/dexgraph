@@ -1,0 +1,22 @@
+#stats {
+    &-graphs {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        align-items: center;
+        row-gap: 60px;
+    }
+
+    button.stat-change {
+        min-width: 0px;
+        float: right;
+        margin-left: 12px;
+        background-color: $color-background;
+        border: 2px solid $color-primary;
+        color: $color-primary;
+
+        @include breakpoint(600px) {
+            display: none;
+        }
+    }
+}

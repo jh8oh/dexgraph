@@ -29,7 +29,7 @@ import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import router from "@/router";
 import { AxiosError } from "axios";
-import { login } from "@/ts/network/calls";
+import { login, check } from "@/ts/network/calls";
 import { ErrorResponse } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
 
@@ -41,6 +41,37 @@ export default class Login extends Vue {
   $refs!: {
     input_password: HTMLInputElement;
   };
+
+  mounted(): void {
+    this.checkFollowedManga();
+    this.checkUsername();
+  }
+
+  private checkFollowedManga() {
+    if (store.state.followedMangas.length != 0) {
+      router.push("result");
+    } else {
+      this.checkToken();
+    }
+  }
+
+  private checkToken() {
+    if (store.state.token.session != "") {
+      check(store.state.token.session)
+        .then((response) => {
+          if (response.data.isAuthenticated) {
+            router.push("loading");
+          }
+        })
+        .catch((error: AxiosError<ErrorResponse>) => {
+          this.errorMessage = handleErrorMessage(error);
+        });
+    }
+  }
+
+  private checkUsername() {
+    this.username = store.state.username;
+  }
 
   private focusPassword() {
     this.$refs.input_password.focus();

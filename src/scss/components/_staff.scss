@@ -1,0 +1,44 @@
+#staff {
+    &-content {
+        display: flex;
+        flex-flow: column nowrap;
+        row-gap: 12px;
+    }
+
+    .staff-list {
+        margin-bottom: 32px;
+    }
+
+    ul {
+        padding: 0;
+        list-style: none;
+
+        li {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .index {
+            margin-right: 24px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .staff-count {
+            float: right;
+        }
+    }
+
+    button {
+        min-width: 120px;
+        margin-right: 8px;
+    }
+
+    .less {
+        background-color: $color-background;
+        border: 2px solid $color-primary;
+        color: $color-primary;
+    }
+}

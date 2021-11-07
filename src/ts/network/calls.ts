@@ -7,6 +7,7 @@ import {
   MANGA_ENDPOINT,
   MANGA_STATUS_ENDPOINT,
   LOGGED_USER_ENDPOINT,
+  CHECK_ENDPOINT,
 } from "./config";
 import {
   StaffResponse,
@@ -15,6 +16,7 @@ import {
   MangaResponse,
   MangaStatusResponse,
   UserResponse,
+  CheckResponse,
 } from "../model/response";
 
 export const login = async (
@@ -26,6 +28,13 @@ export const login = async (
     username: isEmail ? "" : username,
     email: isEmail ? username : "",
     password: password,
+  });
+};
+
+export const check = async (session: string): Promise<AxiosResponse<CheckResponse>> => {
+  const bearer = { Authorization: `Bearer ${session}` };
+  return await axios.get(HOST_URL + CHECK_ENDPOINT, {
+    headers: bearer,
   });
 };
 
