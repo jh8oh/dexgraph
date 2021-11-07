@@ -24,6 +24,14 @@
 
         a {
             text-decoration: none;
+
+            &:link {
+                color: $color-primary;
+            }
+
+            &:visited {
+                color: $color-priamry-dark;
+            }
         }
 
         .staff-count {
