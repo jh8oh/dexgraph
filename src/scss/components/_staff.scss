@@ -1,0 +1,24 @@
+#staff {
+    ul {
+        margin: 16px;
+        list-style: none;
+
+        li {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        span {
+            margin-right: 24px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    button {
+        min-width: 120px;
+        margin-right: 12px;
+    }
+}

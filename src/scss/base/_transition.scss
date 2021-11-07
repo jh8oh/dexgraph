@@ -1,0 +1,27 @@
+@keyframes slide-in {
+    from {
+        height: 0;
+    }
+    to {
+        height: 28px;
+    }
+}
+
+@keyframes slide-out {
+    from {
+        height: 28px;
+    }
+    to {
+        height: 0;
+    }
+}
+
+.list-enter-active {
+    transition: all 0.7s;
+    animation: slide-in 0.7s ease-out forwards;
+}
+
+.list-leave-active {
+    transition: all 0.7s;
+    animation: slide-out 0.7s ease-out forwards;
+}

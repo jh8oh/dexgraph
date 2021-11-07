@@ -19,7 +19,12 @@
           </li>
         </transition-group>
         <button @click="this.authorListSize = this.authorListSize + 10">More</button>
-        <button @click="this.authorListSize = this.authorListSize - 10">Less</button>
+        <button
+          v-if="this.authorListSize > 10"
+          @click="this.authorListSize = this.authorListSize - 10"
+        >
+          Less
+        </button>
       </div>
       <div>
         <h3>Artists</h3>
@@ -38,7 +43,12 @@
           </li>
         </transition-group>
         <button @click="this.artistListSize = this.artistListSize + 10">More</button>
-        <button @click="this.artistListSize = this.artistListSize - 10">Less</button>
+        <button
+          v-if="this.authorListSize > 10"
+          @click="this.artistListSize = this.artistListSize - 10"
+        >
+          Less
+        </button>
       </div>
     </div>
   </section>

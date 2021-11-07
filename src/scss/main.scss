@@ -8,6 +8,7 @@
 
 // Base
 @import "base/typeface";
+@import "base/transition";
 
 // Layout
 @import "layouts/base";
@@ -17,6 +18,7 @@
 @import "components/button";
 @import "components/mangalist";
 @import "components/stats";
+@import "components/staff";
 
 // Views
 @import "views/login";
