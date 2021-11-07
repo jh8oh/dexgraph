@@ -13,14 +13,31 @@
     }
 
     li {
-        flex: 0 0 256px;
-        height: 360px;
+        flex: 0 0 18vw;
+        height: 25vw;
+        max-width: 256px;
+        max-height: 360px;
         position: relative;
         margin-bottom: 8px;
 
-        @include breakpoint(1100px) {
-            flex: 0 0 172px;
-            height: 242px;
+        @include breakpoint(1060px) {
+            flex: 0 0 22vw;
+            height: 31vw;
+        }
+
+        @include breakpoint(860px) {
+            flex: 0 0 30vw;
+            height: 42vw;
+        }
+
+        @include breakpoint(600px) {
+            flex: 0 0 45vw;
+            height: 63vw;
+        }
+
+        @include breakpoint(360px) {
+            flex: 0 0 85vw;
+            height: 120vw;
         }
     }
 
@@ -30,26 +47,56 @@
     }
 
     img {
-        width: 256px;
-        height: 360px;
+        width: 18vw;
+        height: 25vw;
+        max-width: 256px;
+        max-height: 360px;
 
-        @include breakpoint(1100px) {
-            width: 172px;
-            height: 242px;
+        @include breakpoint(1060px) {
+            width: 22vw;
+            height: 31vw;
+        }
+
+        @include breakpoint(860px) {
+            width: 30vw;
+            height: 42vw;
+        }
+
+        @include breakpoint(600px) {
+            width: 45vw;
+            height: 63vw;
+        }
+
+        @include breakpoint(360px) {
+            width: 85vw;
+            height: 120vw;
         }
     }
 
     figcaption {
         position: absolute;
-        width: 256px;
+        width: 18vw;
+        max-width: 256px;
         bottom: 0;
         text-align: center;
         color: white;
         background: rgba(46, 49, 49, 0.6);
 
-        @include breakpoint(1100px) {
-            width: 172px;
+        @include breakpoint(1060px) {
             font-size: 12px;
+            width: 22vw;
+        }
+
+        @include breakpoint(860px) {
+            width: 30vw;
+        }
+
+        @include breakpoint(600px) {
+            width: 45vw;
+        }
+
+        @include breakpoint(360px) {
+            width: 85vw;
         }
     }
 }
