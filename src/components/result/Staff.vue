@@ -11,7 +11,16 @@
           :height="BarChartHeight"
         />
       </div>
-      <ul></ul>
+      <div>
+        <transition-group name="list" tag="ul">
+          <li v-for="(author, index) in authorList" :key="author">
+            <span>{{ index + 1 }}</span>
+            <a :href="'https://mangadex.org/author/' + getStaffLink(author)">{{ author }}</a>
+          </li>
+        </transition-group>
+        <button @click="this.authorListSize = this.authorListSize + 10">More</button>
+        <button @click="this.authorListSize = this.authorListSize - 10">Less</button>
+      </div>
       <div>
         <h3>Artists</h3>
         <BarChart
@@ -21,7 +30,16 @@
           :height="BarChartHeight"
         />
       </div>
-      <ul></ul>
+      <div>
+        <transition-group name="list" tag="ul">
+          <li v-for="(artist, index) in artistList" :key="artist">
+            <span>{{ index + 1 }}</span>
+            <a :href="'https://mangadex.org/author/' + getStaffLink(artist)">{{ artist }}</a>
+          </li>
+        </transition-group>
+        <button @click="this.artistListSize = this.artistListSize + 10">More</button>
+        <button @click="this.artistListSize = this.artistListSize - 10">Less</button>
+      </div>
     </div>
   </section>
 </template>
@@ -78,13 +96,23 @@ function toChartData(map: Map<string, number>) {
         };
       }
     },
+    authorList() {
+      return Array.from(this.authors.keys()).splice(0, this.authorListSize);
+    },
+    artistList() {
+      return Array.from(this.artists.keys()).splice(0, this.artistListSize);
+    },
   },
 })
 export default class Staff extends Vue {
+  private followedMangas = store.state.followedMangas;
   private authors = new Map<string, number>();
   private artists = new Map<string, number>();
 
   private isLessThan600 = false;
+
+  private authorListSize = 10;
+  private artistListSize = 10;
 
   created(): void {
     window.addEventListener("resize", this.handleResize);
@@ -108,14 +136,22 @@ export default class Staff extends Vue {
   }
 
   private setUpMangaStaff() {
-    const followedMangas = store.state.followedMangas;
-    for (const mangaFull of followedMangas) {
+    for (const mangaFull of this.followedMangas) {
       addToMap(this.authors, mangaFull.author.attributes.name);
       addToMap(this.artists, mangaFull.artist.attributes.name);
     }
 
     this.authors = sortMap(this.authors);
     this.artists = sortMap(this.artists);
+  }
+
+  private getStaffLink(name: string) {
+    const search = this.followedMangas.find(
+      (mangaFull) =>
+        mangaFull.author.attributes.name == name || mangaFull.artist.attributes.name == name
+    );
+
+    return search?.author.attributes.name == name ? search?.author.id : search?.artist.id;
   }
 }
 </script>
