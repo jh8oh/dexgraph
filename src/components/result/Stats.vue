@@ -34,7 +34,7 @@
         />
       </div>
       <div>
-        <h3>Genre</h3>
+        <h3>Genres</h3>
         <BarChart
           :chartData="genresChartData"
           :options="barChartOptions"
@@ -55,7 +55,7 @@
         </button>
       </div>
       <div>
-        <h3>Theme</h3>
+        <h3>Themes</h3>
         <BarChart
           :chartData="themesChartData"
           :options="barChartOptions"
@@ -76,7 +76,7 @@
         </button>
       </div>
       <div>
-        <h3>Format</h3>
+        <h3>Formats</h3>
         <BarChart
           :chartData="formatsChartData"
           :options="barChartOptions"

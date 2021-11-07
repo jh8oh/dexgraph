@@ -21,6 +21,7 @@ h1 {
 
 h2 {
     @include text($heading-font-family, 36px, 400, 1.2, -1px);
+    margin-bottom: 16px;
 }
 
 h3 {
