@@ -1,6 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import { store, key } from "./store";
+import axiosThrottle from "axios-request-throttle";
+import axios from "axios";
 
-createApp(App).use(store).use(router).mount("#app");
+axiosThrottle.use(axios, { requestsPerSecond: 10 });
+createApp(App).use(store, key).use(router).mount("#app");

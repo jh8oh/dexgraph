@@ -1,0 +1,14 @@
+// ---------------------------------------------------------------------------
+// Contains styles for containers of varying sizes
+// ---------------------------------------------------------------------------
+
+// Outermost container
+body {
+    @extend %no-whitespace;
+}
+
+// The default page container (what's within the router-page)
+.page {
+    position: relative;
+    min-height: $content-height;
+}

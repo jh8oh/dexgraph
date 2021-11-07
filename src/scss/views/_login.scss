@@ -1,0 +1,29 @@
+// ---------------------------------------------------------------------------
+// This file contains styles that are specific to the "Login" page.
+// ---------------------------------------------------------------------------
+
+#login {
+    &-content {
+        @extend %absolute-center;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+
+        & > * {
+            margin-bottom: 8px;
+        }
+    }
+
+    h1 {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    #mangadex {
+        color: $color-primary;
+    }
+
+    #error {
+        color: $color-error;
+    }
+}
