@@ -24,14 +24,12 @@
 <script lang="ts">
 import { store } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import Overview from "@/components/result/Overview.vue";
 import MangaList from "@/components/result/MangaList.vue";
 import Stats from "@/components/result/Stats.vue";
 import Staff from "@/components/result/Staff.vue";
 
 @Options({
   components: {
-    Overview,
     MangaList,
     Stats,
     Staff,
@@ -40,8 +38,8 @@ import Staff from "@/components/result/Staff.vue";
 export default class Result extends Vue {
   private username = "";
 
-  currentTab = "Overview";
-  tabs = ["Overview", "Manga List", "Stats", "Staff"];
+  currentTab = "MangaList";
+  tabs = ["Manga List", "Stats", "Staff"];
 
   mounted(): void {
     this.username = store.state.username;

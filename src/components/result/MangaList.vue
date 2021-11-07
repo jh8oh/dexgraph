@@ -1,6 +1,6 @@
 <template>
   <section id="manga-list">
-    <h2>Manga List</h2>
+    <h2>Manga List ({{ mangaList?.length }})</h2>
     <ul>
       <li v-for="mangaFull in mangaList" :key="mangaFull.manga.id">
         <figure @click="goToUrl(mangaFull.manga.id)">
@@ -15,9 +15,9 @@
 </template>
 
 <script lang="ts">
+import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import { MangaFull } from "@/ts/model/data";
-import { Vue } from "vue-class-component";
 
 export default class MangaList extends Vue {
   private mangaList: MangaFull[] | null = null;
