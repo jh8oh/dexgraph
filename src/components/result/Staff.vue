@@ -11,15 +11,17 @@
           :height="BarChartHeight"
         />
       </div>
-      <div>
+      <div class="staff-list">
         <transition-group name="list" tag="ul">
-          <li v-for="(author, index) in authorList" :key="author">
-            <span>{{ index + 1 }}</span>
-            <a :href="'https://mangadex.org/author/' + getStaffLink(author)">{{ author }}</a>
+          <li v-for="(author, index) in authorList" :key="author[0]">
+            <span class="index">{{ index + 1 }}</span>
+            <a :href="'https://mangadex.org/author/' + getStaffLink(author[0])">{{ author[0] }}</a>
+            <span class="staff-count">{{ author[1] }}</span>
           </li>
         </transition-group>
         <button @click="this.authorListSize = this.authorListSize + 10">More</button>
         <button
+          class="less"
           v-if="this.authorListSize > 10"
           @click="this.authorListSize = this.authorListSize - 10"
         >
@@ -35,16 +37,18 @@
           :height="BarChartHeight"
         />
       </div>
-      <div>
+      <div class="staff-list">
         <transition-group name="list" tag="ul">
-          <li v-for="(artist, index) in artistList" :key="artist">
-            <span>{{ index + 1 }}</span>
-            <a :href="'https://mangadex.org/author/' + getStaffLink(artist)">{{ artist }}</a>
+          <li v-for="(artist, index) in artistList" :key="artist[0]">
+            <span class="index">{{ index + 1 }}</span>
+            <a :href="'https://mangadex.org/author/' + getStaffLink(artist[0])">{{ artist[0] }}</a>
+            <span class="staff-count">{{ artist[1] }}</span>
           </li>
         </transition-group>
         <button @click="this.artistListSize = this.artistListSize + 10">More</button>
         <button
-          v-if="this.authorListSize > 10"
+          class="less"
+          v-if="this.artistListSize > 10"
           @click="this.artistListSize = this.artistListSize - 10"
         >
           Less
@@ -107,10 +111,10 @@ function toChartData(map: Map<string, number>) {
       }
     },
     authorList() {
-      return Array.from(this.authors.keys()).splice(0, this.authorListSize);
+      return Array.from(this.authors.entries()).splice(0, this.authorListSize);
     },
     artistList() {
-      return Array.from(this.artists.keys()).splice(0, this.artistListSize);
+      return Array.from(this.artists.entries()).splice(0, this.artistListSize);
     },
   },
 })
