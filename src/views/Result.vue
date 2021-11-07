@@ -2,6 +2,7 @@
   <div id="result" class="page">
     <div id="result-content">
       <h1>{{ username }}</h1>
+      <button id="sign-out" @click="signOut()">Sign Out</button>
       <div id="result-component">
         <input id="toggle-menu" type="checkbox" />
         <label id="menu-icon" for="toggle-menu" />
@@ -22,8 +23,9 @@
 </template>
 
 <script lang="ts">
-import { store } from "@/store";
 import { Options, Vue } from "vue-class-component";
+import { store } from "@/store";
+import router from "@/router";
 import MangaList from "@/components/result/MangaList.vue";
 import Stats from "@/components/result/Stats.vue";
 import Staff from "@/components/result/Staff.vue";
@@ -60,6 +62,15 @@ export default class Result extends Vue {
         }
       }
     }
+  }
+
+  private signOut() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    localStorage.removeItem("followedMangas");
+    store.commit("clear");
+
+    router.push("/");
   }
 }
 </script>
