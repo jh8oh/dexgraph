@@ -8,3 +8,18 @@
         @content;
     }
 }
+
+// Transition mixin
+@mixin transition($args...) {
+    transition: $args;
+    -webkit-transition: $args;
+    -moz-transition: $args;
+    -ms-transition: $args;
+    -o-transition: $args;
+}
+
+// Size
+@mixin size($px) {
+    height: $px;
+    width: $px;
+}

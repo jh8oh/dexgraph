@@ -3,6 +3,8 @@
     <div id="result-content">
       <h1>{{ username }}</h1>
       <div id="result-component">
+        <input id="toggle-menu" type="checkbox" />
+        <label id="menu-icon" for="toggle-menu" />
         <ul id="result-sidebar">
           <li
             v-for="tab in tabs"
