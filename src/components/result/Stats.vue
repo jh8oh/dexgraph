@@ -109,7 +109,7 @@ import {
   staticMangaStatus,
   staticPublicationDemographic,
 } from "@/ts/model/static";
-import { addToMap } from "@/ts/util";
+import { addToMap, sortMap } from "@/ts/util";
 import { colors } from "@/ts/util/chart";
 import { PieChart, BarChart } from "vue-chart-3";
 
@@ -134,21 +134,16 @@ function toDisplayText(s: string | null): string {
   }
 }
 
-function toChartData(map: Map<string | null, number>, isBar: boolean, maxSize = 10) {
-  let newMap = map;
-  if (isBar) {
-    newMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
-  }
-
-  let size = newMap.size > maxSize ? maxSize : newMap.size;
+function toChartData(map: Map<string | null, number>, maxSize = 10) {
+  let size = map.size > maxSize ? maxSize : map.size;
 
   return {
-    labels: Array.from<string | null>(newMap.keys())
+    labels: Array.from<string | null>(map.keys())
       .slice(0, size)
       .map((s) => toDisplayText(s)),
     datasets: [
       {
-        data: Array.from<number>(newMap.values()).slice(0, size),
+        data: Array.from<number>(map.values()).slice(0, size),
         backgroundColor: colors(size),
       },
     ],
@@ -162,31 +157,31 @@ function toChartData(map: Map<string | null, number>, isBar: boolean, maxSize = 
   },
   computed: {
     followStatusChartData() {
-      return toChartData(this.followStatus, false);
+      return toChartData(this.followStatus);
     },
     mangaStatusChartData() {
-      return toChartData(this.mangaStatus, false);
+      return toChartData(this.mangaStatus);
     },
     publicationDemographicChartData() {
-      return toChartData(this.publicationDemographic, false);
+      return toChartData(this.publicationDemographic);
     },
     contentRatingChartData() {
-      return toChartData(this.contentRating, false);
+      return toChartData(this.contentRating);
     },
     originalLanguagesIsPie() {
       return this.originalLanguages.size <= 6;
     },
     originalLanguagesChartData() {
-      return toChartData(this.originalLanguages, this.originalLanguagesIsPie);
+      return toChartData(this.originalLanguages);
     },
     genresChartData() {
-      return toChartData(this.genres, true, this.genreMaxSize);
+      return toChartData(this.genres, this.genreMaxSize);
     },
     themesChartData() {
-      return toChartData(this.themes, true, this.themeMaxSize);
+      return toChartData(this.themes, this.themeMaxSize);
     },
     formatsChartData() {
-      return toChartData(this.formats, true, this.formatMaxSize);
+      return toChartData(this.formats, this.formatMaxSize);
     },
     barChartWidth() {
       return this.isLessThan600 ? 500 : 800;
@@ -289,6 +284,11 @@ export default class Stats extends Vue {
         }
       }
     }
+
+    this.originalLanguages = sortMap(this.originalLanguages);
+    this.genres = sortMap(this.genres);
+    this.themes = sortMap(this.themes);
+    this.formats = sortMap(this.formats);
   }
 }
 </script>

@@ -11,6 +11,7 @@
           :height="BarChartHeight"
         />
       </div>
+      <ul></ul>
       <div>
         <h3>Artists</h3>
         <BarChart
@@ -20,6 +21,7 @@
           :height="BarChartHeight"
         />
       </div>
+      <ul></ul>
     </div>
   </section>
 </template>
@@ -27,27 +29,18 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { store } from "@/store";
-import { addToMap } from "@/ts/util";
+import { addToMap, sortMap } from "@/ts/util";
 import { colors } from "@/ts/util/chart";
 import { BarChart } from "vue-chart-3";
 
-function toDisplayText(s: string): string {
-  const toSpace = s.replace(/_/g, " ");
-  return toSpace[0].toUpperCase() + toSpace.slice(1);
-}
-
 function toChartData(map: Map<string, number>) {
-  const newMap = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
-
-  let size = newMap.size > 10 ? 10 : newMap.size;
+  let size = map.size > 10 ? 10 : map.size;
 
   return {
-    labels: Array.from<string>(newMap.keys())
-      .slice(0, size)
-      .map((s) => toDisplayText(s)),
+    labels: Array.from<string>(map.keys()).slice(0, size),
     datasets: [
       {
-        data: Array.from<number>(newMap.values()).slice(0, size),
+        data: Array.from<number>(map.values()).slice(0, size),
         backgroundColor: colors(size),
       },
     ],
@@ -120,6 +113,9 @@ export default class Staff extends Vue {
       addToMap(this.authors, mangaFull.author.attributes.name);
       addToMap(this.artists, mangaFull.artist.attributes.name);
     }
+
+    this.authors = sortMap(this.authors);
+    this.artists = sortMap(this.artists);
   }
 }
 </script>
