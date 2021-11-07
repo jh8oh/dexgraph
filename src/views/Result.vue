@@ -40,9 +40,6 @@ import Staff from "@/components/result/Staff.vue";
 export default class Result extends Vue {
   private username = "";
 
-  private authors = new Set<string>();
-  private artists = new Set<string>();
-
   currentTab = "Overview";
   tabs = ["Overview", "Manga List", "Stats", "Staff"];
 

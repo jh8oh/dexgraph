@@ -109,6 +109,7 @@ import {
   staticMangaStatus,
   staticPublicationDemographic,
 } from "@/ts/model/static";
+import { addToMap } from "@/ts/util";
 import { colors } from "@/ts/util/chart";
 import { PieChart, BarChart } from "vue-chart-3";
 
@@ -233,6 +234,7 @@ export default class Stats extends Vue {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
   }
+
   destroyed(): void {
     window.removeEventListener("resize", this.handleResize);
   }
@@ -258,31 +260,31 @@ export default class Stats extends Vue {
     const followedMangas = store.state.followedMangas;
     for (const mangaFull of followedMangas) {
       // Follow Status
-      this.addToMap(this.followStatus, mangaFull.status);
+      addToMap(this.followStatus, mangaFull.status);
 
       // Manga Status
-      this.addToMap(this.mangaStatus, mangaFull.manga.attributes.status);
+      addToMap(this.mangaStatus, mangaFull.manga.attributes.status);
 
       // Publication Demographic
-      this.addToMap(this.publicationDemographic, mangaFull.manga.attributes.publicationDemographic);
+      addToMap(this.publicationDemographic, mangaFull.manga.attributes.publicationDemographic);
 
       // Content Rating
-      this.addToMap(this.contentRating, mangaFull.manga.attributes.contentRating);
+      addToMap(this.contentRating, mangaFull.manga.attributes.contentRating);
 
       // Original Language
-      this.addToMap(this.originalLanguages, mangaFull.manga.attributes.originalLanguage);
+      addToMap(this.originalLanguages, mangaFull.manga.attributes.originalLanguage);
 
       // Genre/Theme/Format
       for (const tag of mangaFull.manga.attributes.tags) {
         switch (tag.attributes.group) {
           case "genre":
-            this.addToMap(this.genres, tag.attributes.name.en);
+            addToMap(this.genres, tag.attributes.name.en);
             break;
           case "theme":
-            this.addToMap(this.themes, tag.attributes.name.en);
+            addToMap(this.themes, tag.attributes.name.en);
             break;
           case "format":
-            this.addToMap(this.formats, tag.attributes.name.en);
+            addToMap(this.formats, tag.attributes.name.en);
             break;
         }
       }
