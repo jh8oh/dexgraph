@@ -14,5 +14,9 @@
         background-color: $color-background;
         border: 2px solid $color-primary;
         color: $color-primary;
+
+        @include breakpoint(600px) {
+            display: none;
+        }
     }
 }

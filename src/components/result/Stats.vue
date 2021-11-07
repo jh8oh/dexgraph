@@ -29,12 +29,18 @@
           v-else
           :chartData="originalLanguagesChartData"
           :options="barChartOptions"
-          :width="800"
+          :width="barChartWidth"
+          :height="BarChartHeight"
         />
       </div>
       <div>
         <h3>Genre</h3>
-        <BarChart :chartData="genresChartData" :options="barChartOptions" :width="800" />
+        <BarChart
+          :chartData="genresChartData"
+          :options="barChartOptions"
+          :width="barChartWidth"
+          :height="BarChartHeight"
+        />
         <button
           class="stat-change"
           @click="genreMaxSize = genreMaxSize > 10 ? genreMaxSize - 5 : 10"
@@ -50,7 +56,12 @@
       </div>
       <div>
         <h3>Theme</h3>
-        <BarChart :chartData="themesChartData" :options="barChartOptions" :width="800" />
+        <BarChart
+          :chartData="themesChartData"
+          :options="barChartOptions"
+          :width="barChartWidth"
+          :height="BarChartHeight"
+        />
         <button
           class="stat-change"
           @click="themeMaxSize = themeMaxSize > 10 ? themeMaxSize - 5 : 10"
@@ -66,7 +77,12 @@
       </div>
       <div>
         <h3>Format</h3>
-        <BarChart :chartData="formatsChartData" :options="barChartOptions" :width="800" />
+        <BarChart
+          :chartData="formatsChartData"
+          :options="barChartOptions"
+          :width="barChartWidth"
+          :height="BarChartHeight"
+        />
         <button
           class="stat-change"
           @click="formatMaxSize = formatMaxSize > 10 ? formatMaxSize - 5 : 10"
@@ -171,6 +187,26 @@ function toChartData(map: Map<string | null, number>, isBar: boolean, maxSize = 
     formatsChartData() {
       return toChartData(this.formats, true, this.formatMaxSize);
     },
+    barChartWidth() {
+      return this.isLessThan600 ? 500 : 800;
+    },
+    BarChartHeight() {
+      return this.isLessThan600 ? 500 : 400;
+    },
+    barChartOptions() {
+      if (this.isLessThan600) {
+        return {
+          responsive: true,
+          indexAxis: "y",
+          plugins: { legend: { display: false } },
+        };
+      } else {
+        return {
+          responsive: true,
+          plugins: { legend: { display: false } },
+        };
+      }
+    },
   },
 })
 export default class Stats extends Vue {
@@ -191,10 +227,26 @@ export default class Stats extends Vue {
   private themeMaxSize = 10;
   private formatMaxSize = 10;
   private pieChartOptions = { responsive: true };
-  private barChartOptions = { responsive: true, plugins: { legend: { display: false } } };
+  private isLessThan600 = false;
+
+  created(): void {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  }
+  destroyed(): void {
+    window.removeEventListener("resize", this.handleResize);
+  }
 
   beforeMount(): void {
     this.setUpMangaStats();
+  }
+
+  private handleResize() {
+    if (window.innerWidth > 600) {
+      this.isLessThan600 = false;
+    } else {
+      this.isLessThan600 = true;
+    }
   }
 
   private addToMap(map: Map<string | null, number>, key: string | null) {
