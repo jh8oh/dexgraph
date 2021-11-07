@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import {
   STAFF_ENDPOINT,
   COVER_ENDPOINT,
+  REFRESH_ENDPOINT,
   HOST_URL,
   LOGIN_ENDPOINT,
   MANGA_ENDPOINT,
@@ -17,6 +18,7 @@ import {
   MangaStatusResponse,
   UserResponse,
   CheckResponse,
+  RefreshResponse,
 } from "../model/response";
 
 export const login = async (
@@ -35,6 +37,12 @@ export const check = async (session: string): Promise<AxiosResponse<CheckRespons
   const bearer = { Authorization: `Bearer ${session}` };
   return await axios.get(HOST_URL + CHECK_ENDPOINT, {
     headers: bearer,
+  });
+};
+
+export const refresh = async (refresh: string): Promise<AxiosResponse<RefreshResponse>> => {
+  return await axios.post(HOST_URL + REFRESH_ENDPOINT, {
+    token: refresh,
   });
 };
 

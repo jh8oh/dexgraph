@@ -4,6 +4,7 @@ const HOST_URL = "https://api.mangadex.org/";
 // Auth Endpoints
 const LOGIN_ENDPOINT = "auth/login";
 const CHECK_ENDPOINT = "auth/check";
+const REFRESH_ENDPOINT = "auth/refresh";
 
 // User Endpoints
 const LOGGED_USER_ENDPOINT = "user/me";
@@ -18,6 +19,7 @@ export {
   HOST_URL,
   LOGIN_ENDPOINT,
   CHECK_ENDPOINT,
+  REFRESH_ENDPOINT,
   LOGGED_USER_ENDPOINT,
   MANGA_STATUS_ENDPOINT,
   MANGA_ENDPOINT,
