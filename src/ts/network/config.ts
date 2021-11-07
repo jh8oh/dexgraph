@@ -1,5 +1,5 @@
 // Host URL
-const HOST_URL = "https://api.mangadex.org/";
+const HOST_URL = "/api/";
 
 // Auth Endpoints
 const LOGIN_ENDPOINT = "auth/login";
