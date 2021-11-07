@@ -1,6 +1,7 @@
 <template>
   <div id="login" class="page">
     <div id="login-content">
+      <img src="../assets/logo.png" />
       <h1>
         Log in to <span id="mangadex"><strong>MangaDex</strong></span>
       </h1>
@@ -29,7 +30,7 @@ import { Vue } from "vue-class-component";
 import { store } from "@/store";
 import router from "@/router";
 import { AxiosError } from "axios";
-import { login, check } from "@/ts/network/calls";
+import { login, check, refresh } from "@/ts/network/calls";
 import { ErrorResponse } from "@/ts/model/response";
 import { handleErrorMessage } from "@/ts/util/errorMessage";
 
@@ -61,6 +62,17 @@ export default class Login extends Vue {
         .then((response) => {
           if (response.data.isAuthenticated) {
             router.push("loading");
+          } else {
+            refresh(store.state.token.refresh)
+              .then((response) => {
+                if (response.data.result == "ok") {
+                  store.commit("setToken", response.data.token);
+                  router.push("loading");
+                }
+              })
+              .catch((error: AxiosError<ErrorResponse>) => {
+                this.errorMessage = handleErrorMessage(error);
+              });
           }
         })
         .catch((error: AxiosError<ErrorResponse>) => {

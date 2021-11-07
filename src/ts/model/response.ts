@@ -27,6 +27,11 @@ export interface CheckResponse extends Response {
   permissions: string[];
 }
 
+export interface RefreshResponse extends Response {
+  token: Token;
+  message: string;
+}
+
 // User
 export interface UserResponse extends Response {
   response: string;
