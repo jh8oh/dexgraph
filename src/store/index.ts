@@ -46,5 +46,10 @@ export const store = createStore<State>({
     addManga(state, manga: MangaFull) {
       state.followedMangas.push(manga);
     },
+    clear(state) {
+      state.token = { session: "", refresh: "" };
+      state.username = "";
+      state.followedMangas = [];
+    },
   },
 });
