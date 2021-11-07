@@ -2,9 +2,8 @@
   <div id="login" class="page">
     <div id="login-content">
       <img src="../assets/logo.png" />
-      <h1>
-        Log in to <span id="mangadex"><strong>MangaDex</strong></span>
-      </h1>
+      <h1><strong>DexGraph</strong></h1>
+      <span id="subtitle">So that you can <em>objectively</em> view your trash taste</span>
       <label class="input-text">
         <input v-model="username" type="text" @keyup.enter="focusPassword()" required />
         <span>Username/Email</span>
@@ -22,6 +21,7 @@
       <p id="error">{{ errorMessage }}</p>
       <button @click="login">Log In</button>
     </div>
+    <footer></footer>
   </div>
 </template>
 

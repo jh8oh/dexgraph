@@ -10,17 +10,18 @@
         align-items: center;
 
         & > * {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
     }
 
     h1 {
-        margin-bottom: 24px;
+        margin-bottom: -4px;
+        color: $color-primary;
         text-align: center;
     }
 
-    #mangadex {
-        color: $color-primary;
+    #subtitle {
+        margin-bottom: 28px;
     }
 
     #error {
