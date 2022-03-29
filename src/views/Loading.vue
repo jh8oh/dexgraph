@@ -82,9 +82,15 @@ export default class Loading extends Vue {
           getManga(mangaIds)
             .then((response) => {
               let followedManga = response.data.data;
-              let authorIds = this.getRelationshipIds(followedManga, "author");
-              let artistIds = this.getRelationshipIds(followedManga, "artist");
-              let coverIds = this.getRelationshipIds(followedManga, "cover_art");
+              let authorIds = this.getRelationshipIds(followedManga, "author").filter(
+                (id) => id != undefined
+              );
+              let artistIds = this.getRelationshipIds(followedManga, "artist").filter(
+                (id) => id != undefined
+              );
+              let coverIds = this.getRelationshipIds(followedManga, "cover_art").filter(
+                (id) => id != undefined
+              );
 
               getMangaRelated(authorIds, artistIds, coverIds).then((responses) => {
                 let authors: Staff[];
